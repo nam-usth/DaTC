@@ -1,4 +1,4 @@
-Table I. Retrieval recall (%), ties at their expected rank.
+Table II. Retrieval recall (%), ties at their expected rank.
 
 | upper block: reviewed settings | FB top-1 | FB top-5 | PRESIOUS top-1 | PRESIOUS top-5 |
 |---|---|---|---|---|
@@ -15,7 +15,7 @@ Table I. Retrieval recall (%), ties at their expected rank.
 | (kappa,tau) tuned + local al. | 80.0 | 93.3 | 58.7 | 74.5 |
 
 Object-level sign tests (wins:losses, objects with equal counts dropped)
-- FB pool, DaTC vs (kappa,tau) + cyclic dDTW: 45:7, p = 0.0000
+- FB pool, DaTC vs (kappa,tau) + cyclic dDTW: 45:7, p < 0.0001
 - FB pool, DaTC vs rim length: 36:12, p = 0.0007
 - FB pool, DaTC vs rim planarity: 35:12, p = 0.0011
 - test half, (kappa,tau) tuned + cyclic DTW vs DaTC: 7:3, p = 0.34
@@ -26,4 +26,4 @@ Pair detection on the Fantastic Breaks pool
 - DaTC + local alignment: ROC AUC 0.753, average precision 0.303
 - rim length: ROC AUC 0.808, average precision 0.037
 
-TABLE I REPRODUCED
+TABLE II REPRODUCED

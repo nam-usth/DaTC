@@ -1,4 +1,4 @@
-"""Table I, upper block: the reviewed configuration, untuned for the table.
+"""Table II, upper block: the reviewed configuration, untuned for the table.
 
 Arms (one sampling step per pool, smoothing 2 samples, 9 x 5 symbol code with
 bin edges fitted on the pool without labels):

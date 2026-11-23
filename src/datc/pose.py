@@ -1,6 +1,6 @@
 """Placement: matched rim samples -> rigid transform, by RANSAC.
 
-Ported from the code behind the paper's placement paragraph (Section VI):
+Ported from the code behind the paper's placement paragraph (Section V-C):
 RANSAC (Fischler and Bolles 1981) over minimal samples of three matched pairs,
 Kabsch on each sample, inliers within tau = 3 ds, refit on the largest
 consensus; the traversal direction is chosen by fracture-plane opposition

@@ -1,5 +1,5 @@
 {
- "note": "Values printed in Table I and Section VI-A of the RIVF 2026 camera-ready paper (percent, ties at their expected rank). make_table1.py compares the recomputed values with these, to the printed precision (0.05 points), and object-level sign-test counts exactly.",
+ "note": "Values printed in Table II and Section V-A of the RIVF 2026 camera-ready paper (percent, ties at their expected rank). make_table1.py compares the recomputed values with these, to the printed precision (0.05 points), and object-level sign-test counts exactly.",
  "reviewed": {
   "fantastic_breaks": {
    "DaTC + local alignment": [55.0, 66.7],

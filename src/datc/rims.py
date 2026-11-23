@@ -92,7 +92,7 @@ def component_rims(mesh, fmask: np.ndarray, ds: float, sm: float,
 
 
 def closed_geometry(x: dict, ds: float):
-    """Closed polyline used by the tuned comparison (Table I, lower block).
+    """Closed polyline used by the tuned comparison (Table II, lower block).
 
     Fantastic Breaks caches stored the loop truncated to n samples, so the
     tuned runs put the two dropped samples back on the chord from the last

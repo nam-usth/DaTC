@@ -4,7 +4,7 @@
            -> cyclic Smith-Waterman -> RANSAC placement -> match / no match
 
 The regions come either from contact in the assembled pose (as in the paper)
-or from a per-vertex mask file supplied by the user. Table I is not produced
+or from a per-vertex mask file supplied by the user. Table II is not produced
 here; the experiment scripts call the same modules directly.
 
 The match / no-match verdict compares two numbers of the pair with thresholds
@@ -55,7 +55,7 @@ class PairResult:
     alphabet: Alphabet
     alphabet_source: str
     symbols: tuple
-    score: float                # SW score / (n_A + n_B), the Table I scale
+    score: float                # SW score / (n_A + n_B), the Table II scale
     raw_score: float
     direction: str              # direction of the best score: "mate" (B reversed, alpha negated) or "forward"
     path: np.ndarray            # (k, 2) matched samples of that direction: index on A, index on B

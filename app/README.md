@@ -1,7 +1,7 @@
 # DaTC Studio
 
 Runs the Darboux Turn Code on a pair of thin-shell fragments and shows every
-step, and reproduces Table I of the paper.
+step, and reproduces Table II of the paper.
 
 ```
 python app/datc_studio.py [fragment_a fragment_b | fantastic_breaks_object_folder]
@@ -45,7 +45,7 @@ What is drawn:
 | plot, bottom | beta likewise; the shaded band is the aligned stretch of A |
 
 The score is the Smith-Waterman score divided by n_A + n_B, the scale of
-Table I. *Place B by the RANSAC fit* moves B by the rigid transform that RANSAC
+Table II. *Place B by the RANSAC fit* moves B by the rigid transform that RANSAC
 (Fischler and Bolles 1981; 2000 minimal samples of three matched pairs, Kabsch
 on each, inliers within 3 ds, refit on the largest consensus) finds from the
 matched samples; of the two directions of travel, the one whose fracture planes
@@ -75,14 +75,14 @@ fitted on the two rims, the setting it was measured with.
 
 ## Retrieval tab
 
-*Reproduce Table I* runs the scripts of `experiments/` as separate processes and
+*Reproduce Table II* runs the scripts of `experiments/` as separate processes and
 streams their output below the 3D view:
 
 1. *Build the rim pools* (needs the two dataset folders)
 2. *Upper block (reviewed settings)*
 3. *Lower block (tuned alike)*
-4. *Check against the paper*: prints Table I and ends with
-   `TABLE I REPRODUCED` or `TABLE I MISMATCH`
+4. *Check against the paper*: prints Table II and ends with
+   `TABLE II REPRODUCED` or `TABLE II MISMATCH`
 
 *Rankings*: choose the pool and the arm, press *Load rankings*. Each row is a
 query: its mate's rank (ties at their mid-rank) and the first candidate. Select

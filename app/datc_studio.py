@@ -1,4 +1,4 @@
-"""DaTC Studio - match two fracture rims with the Darboux turn code, and browse or reproduce Table I.
+"""DaTC Studio - match two fracture rims with the Darboux turn code, and browse or reproduce Table II.
 
     python app/datc_studio.py [fragment_a.ply fragment_b.ply | fantastic_breaks_object_folder]
     python app/datc_studio.py --selftest <object folder> out.png   (headless check, saves screenshots)
@@ -481,7 +481,7 @@ class Studio(QtWidgets.QMainWindow):
         scroll, side = self._panel()
         row.addWidget(scroll, 0)
 
-        rep = Region("Reproduce Table I", RED)
+        rep = Region("Reproduce Table II", RED)
         roots = Region("Datasets", BLUE, layout=QtWidgets.QFormLayout)
         self.fb_root = QtWidgets.QLineEdit(os.environ.get("DATC_FB_ROOT", ""))
         self.fb_root.setPlaceholderText("folder with 00/, 01/, ... of Fantastic Breaks")

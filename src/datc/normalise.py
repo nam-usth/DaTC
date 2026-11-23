@@ -1,4 +1,4 @@
-"""Channel transforms for the tuned comparison (Table I, lower block).
+"""Channel transforms for the tuned comparison (Table II, lower block).
 
 Every transform is fitted without labels on a set of rims and then applied to
 the rims being scored; the two sets may differ (frozen on development objects,

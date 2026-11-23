@@ -1,4 +1,4 @@
-"""Table I, lower block: DaTC and (kappa, tau) tuned alike.
+"""Table II, lower block: DaTC and (kappa, tau) tuned alike.
 
 The three configurations were selected on the 30 development objects of the
 retrieval pool over the same 63-point grid (smoothing x matcher x transform);

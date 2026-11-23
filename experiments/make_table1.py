@@ -1,4 +1,4 @@
-"""Print Table I of the paper from the recomputed results and check every cell.
+"""Print Table II of the paper from the recomputed results and check every cell.
 
 Usage
   python experiments/make_table1.py
@@ -6,7 +6,7 @@ Reads results/table1_reviewed/table1_reviewed.json and
 results/table1_tuned/table1_tuned.json; compares with reference/paper_table1.json
 (percent cells to the printed 0.05, object counts exactly, AUC/AP to 0.0005).
 Writes results/table1.md. Exit code 0 only if every cell matches; the last line
-is 'TABLE I REPRODUCED' or 'TABLE I MISMATCH (k cells)'.
+is 'TABLE II REPRODUCED' or 'TABLE II MISMATCH (k cells)'.
 """
 import json
 import os
@@ -38,7 +38,7 @@ def main():
         if not os.path.exists(p):
             raise SystemExit(f"{p} missing: run the table1 scripts first")
     R, T = json.load(open(pr)), json.load(open(pt))
-    out("Table I. Retrieval recall (%), ties at their expected rank.")
+    out("Table II. Retrieval recall (%), ties at their expected rank.")
     out("")
     out("| upper block: reviewed settings | FB top-1 | FB top-5 | PRESIOUS top-1 | PRESIOUS top-5 |")
     out("|---|---|---|---|---|")
@@ -84,7 +84,7 @@ def main():
         n = check(f"AUC {arm}", round(d["auc"], 3), w["auc"], 0.0005) + check(f"AP {arm}", round(d["ap"], 3), w["ap"], 0.0005)
         out(f"- {arm}: ROC AUC {d['auc']:.3f}, average precision {d['ap']:.3f}{n}")
     out("")
-    out("TABLE I REPRODUCED" if not bad else f"TABLE I MISMATCH ({len(bad)} cells)")
+    out("TABLE II REPRODUCED" if not bad else f"TABLE II MISMATCH ({len(bad)} cells)")
     for b in bad:
         print("  " + b)
     with open(os.path.join(RES, "table1.md"), "w", encoding="utf-8") as f:

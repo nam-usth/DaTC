@@ -1,6 +1,6 @@
 """Pair scores and score matrices.
 
-Two families, both used in Table I of the paper.
+Two families, both used in Table II of the paper.
 
 Reviewed configuration (upper block), one function per arm:
   "sw"           DaTC symbol code + cyclic Smith-Waterman on bin centres

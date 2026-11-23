@@ -12,7 +12,7 @@ how far the rim turns inside that surface (alpha) and out of it (beta), measured
 in the Darboux frame built from the intact-side surface normal. The two angles
 are quantised into a 9 x 5 symbol code (or rank-transformed), and two rims are
 compared by cyclic local alignment (Smith-Waterman), trying both directions of
-travel. The repository reproduces Table I of the paper from the meshes and
+travel. The repository reproduces Table II of the paper from the meshes and
 contains **DaTC Studio**, a PyQt application that runs the method on a pair of
 fragments and shows each step.
 
@@ -27,7 +27,7 @@ src/datc/
   rims.py         contact region -> longest boundary loop -> rim (one per component for PRESIOUS)
   alphabet.py     quantile symbol code, mirrored for the reversed walk of the mate
   kernels.py      Smith-Waterman and cyclic DTW kernels (numba)
-  scoring.py      pair scores and score matrices for every arm of Table I
+  scoring.py      pair scores and score matrices for every arm of Table II
   normalise.py    z and rank transforms of the tuned comparison
   stats.py        expected-tie top-k, object-level sign test, ROC AUC / AP
   datasets.py     Fantastic Breaks and PRESIOUS loaders, the three rim pools
@@ -35,9 +35,9 @@ src/datc/
   pipeline.py     one pair of fragments end to end, with placement and match verdict (used by the app)
 experiments/
   build_pools.py      the three rim pools, cached under cache/
-  table1_reviewed.py  Table I, upper block
-  table1_tuned.py     Table I, lower block
-  make_table1.py      prints Table I and checks every cell against the paper
+  table1_reviewed.py  Table II, upper block
+  table1_tuned.py     Table II, lower block
+  make_table1.py      prints Table II and checks every cell against the paper
   pair_verdict.py     fits and measures the app's match / no-match rule
 app/datc_studio.py    DaTC Studio (PyQt5 + PyVista)
 splits/               the object lists of every pool and split
@@ -81,19 +81,21 @@ set DATC_PRESIOUS_ROOT=D:\data\presious
 
 (or pass `--fb-root` and `--presious-root` to `build_pools.py`).
 
-## Reproduce Table I
+## Reproduce Table II
+
+Table II is the retrieval table of the camera-ready paper (Table I lists the evaluation sets). The scripts keep their earlier names, `table1_*.py` and `make_table1.py`.
 
 ```
 python -u experiments/build_pools.py            # three pools -> cache/        (about 45 min)
 python -u experiments/table1_reviewed.py        # upper block -> results/      (a few minutes)
 python -u experiments/table1_tuned.py           # lower block -> results/      (a few minutes)
-python experiments/make_table1.py               # prints Table I, checks it, exit code 0 if it matches
+python experiments/make_table1.py               # prints Table II, checks it, exit code 0 if it matches
 ```
 
 Times are for an 8-core laptop. `make_table1.py` compares every percentage to
 the value printed in the paper (to its 0.05 precision), the object-level
 sign-test counts exactly and the detection AUC / AP to 0.0005, and ends with
-`TABLE I REPRODUCED` or `TABLE I MISMATCH`. Its output is written to
+`TABLE II REPRODUCED` or `TABLE II MISMATCH`. Its output is written to
 `results/table1.md`. The same four steps can be run from the *Retrieval* tab
 of DaTC Studio.
 
@@ -187,7 +189,7 @@ a helix, and the tie rule.
 
 ## Scope and known limits
 
-This release covers the method and Table I. The other experiments of the paper
+This release covers the method and Table II. The other experiments of the paper
 (partial overlap, edge wear and warp, resolution, the normal-source ablation)
 are not in this repository. The limits stated in the paper apply: the fracture
 region is given (contact in the assembled pose, or a mask), not detected; the
