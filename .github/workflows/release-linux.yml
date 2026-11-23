@@ -1,0 +1,48 @@
+# Linux build of DaTC Studio. Runs when a GitHub release is published (the Windows
+# archive is built locally with packaging/build_release.py and attached by hand) and
+# attaches DaTC-Studio-<version>-linux-x64.tar.gz to that release. Can also be run by
+# hand (workflow_dispatch); the archive is then kept as a workflow artifact only.
+name: release-linux
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  linux:
+    runs-on: ubuntu-22.04          # glibc 2.35: the binary runs on this and newer distributions
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          environment-file: environment.yml
+          activate-environment: datc
+          miniforge-version: latest
+      - name: Qt runtime libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1 libegl1 libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 \
+            libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 libxcb-shape0 \
+            libxcb-cursor0 libdbus-1-3
+      - name: Tests
+        run: python -m pytest -q tests
+      - name: Build
+        run: |
+          pip install pyinstaller==6.21.0
+          python packaging/build_release.py --work build --out dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DaTC-Studio-linux-x64
+          path: dist/*.tar.gz
+      - name: Attach to the release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.event.release.tag_name }}" dist/*.tar.gz --clobber

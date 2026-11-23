@@ -11,7 +11,9 @@
   "normals": "intact",
   "na": 9,
   "nb": 5,
-  "min_pts": 40
+  "min_pts": 40,
+  "icp": false,
+  "icp_tau_ds": 3.0
  },
  "score": 0.20964416552768653,
  "raw_score": 168.34426491873228,
@@ -1066,5 +1068,6 @@
   "inliers": 65,
   "matched": 248,
   "rotation_deg": 173.02276874297996
- }
+ },
+ "pose_icp": null
 }

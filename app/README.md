@@ -31,6 +31,14 @@ python app/datc_studio.py [fragment_a fragment_b | fantastic_breaks_object_folde
    bin edges come from: fitted on the two rims, or the code fitted on the 120
    rims of the Fantastic Breaks retrieval pool (available after step 2 of the
    *Retrieval* tab). **Load default** restores the paper's values.
+
+   *Placement* group: *Refine by ICP on the fracture regions* runs
+   point-to-plane ICP (Chen and Medioni 1992) of B's fracture-region vertices
+   onto A's, starting from the RANSAC pose, after each run or as soon as it is
+   ticked. *ICP reject distance*: point pairs farther apart than this (in ds;
+   default 3, the RANSAC inlier distance, not tuned) are dropped at each
+   iteration. ICP changes the placement only, not the verdict. It cannot undo
+   a RANSAC pose that is turned over: it only moves B to the nearest fit.
 4. **Run DaTC.** The computation runs in a worker thread.
 
 What is drawn:
@@ -51,10 +59,11 @@ on each, inliers within 3 ds, refit on the largest consensus) finds from the
 matched samples; of the two directions of travel, the one whose fracture planes
 face each other is used. The fit uses only the matched samples, not the stored
 pose, so for a true Fantastic Breaks pair (stored assembled) it should turn B
-by close to 0 degrees. *Pull the fragments apart* moves B away from A along
-the line between their centres. *Export* saves the 3D view (PNG), the result
-(JSON: settings, score, symbol strings, matched sample pairs, pose, verdict)
-and a GIF of B travelling from apart to the RANSAC pose.
+by close to 0 degrees. With ICP on, *Place B* uses the ICP pose. *Pull the
+fragments apart* moves B away from A along the line between their centres.
+*Export* saves the 3D view (PNG), the result (JSON: settings, score, symbol
+strings, matched sample pairs, RANSAC pose, ICP pose, verdict) and a GIF of B
+travelling from apart to its placement.
 
 The verdict (*Result* region) answers whether the two rims are mates. Its
 rule, fitted by `experiments/pair_verdict.py` on the development half of the
@@ -99,6 +108,12 @@ The rims of row 2 are drawn in the plane of rim 1 (its principal axes); rim 2
 is first placed by RANSAC, so matched samples line up when the fit is good.
 The meshes are read from the dataset folders under *Datasets*. The verdict and
 its measured rates appear under the table.
+
+*Refine the placement by ICP (Fantastic Breaks)* refines the top-right panel by
+the ICP of the *Pair* tab (same reject distance). The fracture regions are
+recomputed by the rule that built the pool rims: contact with each fragment's
+own mate. For PRESIOUS it is not available: a fragment there has one region per
+contact component, and the pool does not store which faces belong to which rim.
 
 ## Terms
 

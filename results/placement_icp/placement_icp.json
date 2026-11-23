@@ -1,0 +1,580 @@
+{
+ "note": "Placement error of RANSAC and of RANSAC + ICP on the 60 mated pairs of the Pairs: [RANSAC, RANSAC + ICP].",
+ "tau_ds": 3.0,
+ "summary": {
+  "n": 60,
+  "icp_ran": 60,
+  "within_pct_D": {
+   "1": [
+    1,
+    30
+   ],
+   "2": [
+    3,
+    47
+   ],
+   "5": [
+    40,
+    48
+   ]
+  },
+  "within_deg": {
+   "5": [
+    38,
+    47
+   ],
+   "30": [
+    44,
+    48
+   ]
+  },
+  "icp_lowered": 53,
+  "icp_raised": 6,
+  "median_rms_pct_D": [
+   3.2433899334397105,
+   0.9506353486080157
+  ]
+ },
+ "rows": [
+  {
+   "object": "00_00002",
+   "verdict": false,
+   "ransac_rot_deg": 173.02276874297996,
+   "ransac_rms_pct_D": 31.180143174940646,
+   "icp_rot_deg": 170.51984529979768,
+   "icp_rms_pct_D": 31.10220547013362,
+   "icp_log": "ICP (point-to-plane): 5455 region points of B onto 15562 of A, pairs farther than 3 ds dropped; 12 iterations (converged), RMS 0.02048 -> 0.01148 over 3639 -> 3860 pairs; turned a further 16.84 deg, moved 0.05059 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00003",
+   "verdict": true,
+   "ransac_rot_deg": 2.994743327306923,
+   "ransac_rms_pct_D": 2.6342956126555506,
+   "icp_rot_deg": 0.31813701970438407,
+   "icp_rms_pct_D": 0.4585836688712326,
+   "icp_log": "ICP (point-to-plane): 3054 region points of B onto 19506 of A, pairs farther than 3 ds dropped; 4 iterations (converged), RMS 0.01522 -> 0.005906 over 3054 -> 3054 pairs; turned a further 3.15 deg, moved 0.02985 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00005",
+   "verdict": true,
+   "ransac_rot_deg": 4.2669445538005135,
+   "ransac_rms_pct_D": 3.304258075378344,
+   "icp_rot_deg": 0.00444417042525878,
+   "icp_rms_pct_D": 0.00643763649057269,
+   "icp_log": "ICP (point-to-plane): 3456 region points of B onto 18451 of A, pairs farther than 3 ds dropped; 5 iterations (converged), RMS 0.01711 -> 0.001719 over 3453 -> 3456 pairs; turned a further 4.26 deg, moved 0.04777 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00006",
+   "verdict": true,
+   "ransac_rot_deg": 3.1423697306200697,
+   "ransac_rms_pct_D": 3.55614719027099,
+   "icp_rot_deg": 1.687377589465038,
+   "icp_rms_pct_D": 1.0353601684721292,
+   "icp_log": "ICP (point-to-plane): 6324 region points of B onto 13682 of A, pairs farther than 3 ds dropped; 5 iterations (converged), RMS 0.0134 -> 0.006449 over 6324 -> 6324 pairs; turned a further 2.30 deg, moved 0.03804 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00008",
+   "verdict": true,
+   "ransac_rot_deg": 0.659170592216306,
+   "ransac_rms_pct_D": 0.5270233935693555,
+   "icp_rot_deg": 0.02916426258478651,
+   "icp_rms_pct_D": 0.008674295256757237,
+   "icp_log": "ICP (point-to-plane): 1993 region points of B onto 18325 of A, pairs farther than 3 ds dropped; 3 iterations (converged), RMS 0.005321 -> 0.00156 over 1993 -> 1993 pairs; turned a further 0.66 deg, moved 0.00795 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00011",
+   "verdict": true,
+   "ransac_rot_deg": 3.911766181570227,
+   "ransac_rms_pct_D": 1.8010580221543742,
+   "icp_rot_deg": 0.06613686876218958,
+   "icp_rms_pct_D": 0.00996736687575039,
+   "icp_log": "ICP (point-to-plane): 987 region points of B onto 10259 of A, pairs farther than 3 ds dropped; 4 iterations (converged), RMS 0.006641 -> 0.00125 over 987 -> 987 pairs; turned a further 3.87 deg, moved 0.02423 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00012",
+   "verdict": true,
+   "ransac_rot_deg": 110.62348126457208,
+   "ransac_rms_pct_D": 19.18750389946568,
+   "icp_rot_deg": 128.5945054804116,
+   "icp_rms_pct_D": 35.51332253986583,
+   "icp_log": "ICP (point-to-plane): 13926 region points of B onto 15783 of A, pairs farther than 3 ds dropped; 60 iterations (stopped), RMS 0.02252 -> 0.01869 over 4458 -> 2007 pairs; turned a further 103.15 deg, moved 0.4992 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00013",
+   "verdict": true,
+   "ransac_rot_deg": 110.05143160536811,
+   "ransac_rms_pct_D": 16.035367071682035,
+   "icp_rot_deg": 179.04190073632373,
+   "icp_rms_pct_D": 24.642258991796947,
+   "icp_log": "ICP (point-to-plane): 762 region points of B onto 12786 of A, pairs farther than 3 ds dropped; 43 iterations (converged), RMS 0.02407 -> 0.009486 over 417 -> 762 pairs; turned a further 73.89 deg, moved 0.1128 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00014",
+   "verdict": true,
+   "ransac_rot_deg": 62.78307657856268,
+   "ransac_rms_pct_D": 15.052756241131606,
+   "icp_rot_deg": 62.78307657856268,
+   "icp_rms_pct_D": 15.052756241131606,
+   "icp_log": "ICP (point-to-plane): 896 region points of B onto 12089 of A, pairs farther than 3 ds dropped; 0 iterations (stopped), RMS 0.02157 -> 0.02157 over 225 -> 225 pairs; turned a further 0.00 deg, moved 0 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00015",
+   "verdict": false,
+   "ransac_rot_deg": 161.39805793357377,
+   "ransac_rms_pct_D": 34.254471981590214,
+   "icp_rot_deg": 165.5846149851525,
+   "icp_rms_pct_D": 39.73812051137109,
+   "icp_log": "ICP (point-to-plane): 2011 region points of B onto 16274 of A, pairs farther than 3 ds dropped; 55 iterations (converged), RMS 0.02859 -> 0.01798 over 766 -> 668 pairs; turned a further 21.47 deg, moved 0.09436 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00016",
+   "verdict": true,
+   "ransac_rot_deg": 1.4031184993754064,
+   "ransac_rms_pct_D": 2.6487564635523584,
+   "icp_rot_deg": 0.175272796717177,
+   "icp_rms_pct_D": 0.3074552465152677,
+   "icp_log": "ICP (point-to-plane): 6513 region points of B onto 18231 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.01232 -> 0.004676 over 6513 -> 6513 pairs; turned a further 1.32 deg, moved 0.02857 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00017",
+   "verdict": false,
+   "ransac_rot_deg": 4.365363034933451,
+   "ransac_rms_pct_D": 3.7315156368985085,
+   "icp_rot_deg": 0.23393741665903373,
+   "icp_rms_pct_D": 0.3581026401923555,
+   "icp_log": "ICP (point-to-plane): 5558 region points of B onto 18149 of A, pairs farther than 3 ds dropped; 7 iterations (converged), RMS 0.02543 -> 0.006838 over 5369 -> 5558 pairs; turned a further 4.48 deg, moved 0.04774 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00019",
+   "verdict": false,
+   "ransac_rot_deg": 80.70252231290841,
+   "ransac_rms_pct_D": 27.035588858371273,
+   "icp_rot_deg": 115.46582898960176,
+   "icp_rms_pct_D": 29.369891779661007,
+   "icp_log": "ICP (point-to-plane): 683 region points of B onto 10333 of A, pairs farther than 3 ds dropped; 6 iterations (stopped), RMS 0.02381 -> 0.03348 over 166 -> 49 pairs; turned a further 64.96 deg, moved 0.2313 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00020",
+   "verdict": true,
+   "ransac_rot_deg": 171.94361004689296,
+   "ransac_rms_pct_D": 44.868704541134896,
+   "icp_rot_deg": 167.04568500684775,
+   "icp_rms_pct_D": 44.41131123010398,
+   "icp_log": "ICP (point-to-plane): 5128 region points of B onto 12579 of A, pairs farther than 3 ds dropped; 60 iterations (stopped), RMS 0.01278 -> 0.005607 over 1788 -> 1788 pairs; turned a further 70.41 deg, moved 0.4381 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00021",
+   "verdict": true,
+   "ransac_rot_deg": 126.68581472991843,
+   "ransac_rms_pct_D": 29.83484513596377,
+   "icp_rot_deg": 71.94338307446976,
+   "icp_rms_pct_D": 38.02694913842907,
+   "icp_log": "ICP (point-to-plane): 9270 region points of B onto 16377 of A, pairs farther than 3 ds dropped; 11 iterations (stopped), RMS 0.02539 -> 0.02501 over 2931 -> 1181 pairs; turned a further 59.50 deg, moved 0.2818 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00022",
+   "verdict": false,
+   "ransac_rot_deg": 33.14974009392245,
+   "ransac_rms_pct_D": 15.798930218412627,
+   "icp_rot_deg": 0.09187885844934468,
+   "icp_rms_pct_D": 0.08135325103043121,
+   "icp_log": "ICP (point-to-plane): 9908 region points of B onto 19455 of A, pairs farther than 3 ds dropped; 17 iterations (converged), RMS 0.02254 -> 0.004409 over 2551 -> 9908 pairs; turned a further 33.09 deg, moved 0.1477 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00024",
+   "verdict": true,
+   "ransac_rot_deg": 3.175747901022528,
+   "ransac_rms_pct_D": 2.623903922686896,
+   "icp_rot_deg": 0.7475961334649208,
+   "icp_rms_pct_D": 0.6421183473977503,
+   "icp_log": "ICP (point-to-plane): 6677 region points of B onto 18360 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.0187 -> 0.007208 over 6677 -> 6677 pairs; turned a further 2.51 deg, moved 0.03008 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00026",
+   "verdict": false,
+   "ransac_rot_deg": 177.0606565207927,
+   "ransac_rms_pct_D": 43.037457550321754,
+   "icp_rot_deg": 173.19827662800753,
+   "icp_rms_pct_D": 42.12289146172682,
+   "icp_log": "ICP (point-to-plane): 16437 region points of B onto 19926 of A, pairs farther than 3 ds dropped; 16 iterations (converged), RMS 0.02563 -> 0.01866 over 4659 -> 11470 pairs; turned a further 25.05 deg, moved 0.07739 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00027",
+   "verdict": false,
+   "ransac_rot_deg": 61.04412157013821,
+   "ransac_rms_pct_D": 24.03662079826019,
+   "icp_rot_deg": 0.8145349483223329,
+   "icp_rms_pct_D": 0.44357850023231,
+   "icp_log": "ICP (point-to-plane): 2319 region points of B onto 16960 of A, pairs farther than 3 ds dropped; 15 iterations (converged), RMS 0.02273 -> 0.006728 over 872 -> 2319 pairs; turned a further 61.48 deg, moved 0.2643 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00028",
+   "verdict": false,
+   "ransac_rot_deg": 10.558169023837626,
+   "ransac_rms_pct_D": 7.230596322990789,
+   "icp_rot_deg": 0.032153970382182026,
+   "icp_rms_pct_D": 0.01484658538123364,
+   "icp_log": "ICP (point-to-plane): 8759 region points of B onto 18962 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.02514 -> 0.002136 over 5831 -> 8759 pairs; turned a further 10.58 deg, moved 0.05156 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00029",
+   "verdict": false,
+   "ransac_rot_deg": 46.33818802323757,
+   "ransac_rms_pct_D": 14.198333552182417,
+   "icp_rot_deg": 2.756738965996929,
+   "icp_rms_pct_D": 1.436059822201309,
+   "icp_log": "ICP (point-to-plane): 11539 region points of B onto 17214 of A, pairs farther than 3 ds dropped; 12 iterations (converged), RMS 0.02484 -> 0.009444 over 3076 -> 11539 pairs; turned a further 48.72 deg, moved 0.1976 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00030",
+   "verdict": false,
+   "ransac_rot_deg": 158.51401374342353,
+   "ransac_rms_pct_D": 46.57763729194662,
+   "icp_rot_deg": 179.06370761737534,
+   "icp_rms_pct_D": 49.95224562211387,
+   "icp_log": "ICP (point-to-plane): 7894 region points of B onto 19273 of A, pairs farther than 3 ds dropped; 40 iterations (converged), RMS 0.02732 -> 0.0182 over 1356 -> 5207 pairs; turned a further 27.45 deg, moved 0.1603 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00036",
+   "verdict": true,
+   "ransac_rot_deg": 2.0172306285636123,
+   "ransac_rms_pct_D": 3.0336022828142286,
+   "icp_rot_deg": 0.3083631765607264,
+   "icp_rms_pct_D": 0.6751454243704799,
+   "icp_log": "ICP (point-to-plane): 18515 region points of B onto 16497 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.01788 -> 0.006769 over 18515 -> 18515 pairs; turned a further 1.92 deg, moved 0.03547 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00037",
+   "verdict": true,
+   "ransac_rot_deg": 0.4386721625866436,
+   "ransac_rms_pct_D": 1.5136640440064018,
+   "icp_rot_deg": 0.007680727666944825,
+   "icp_rms_pct_D": 0.005351639259080439,
+   "icp_log": "ICP (point-to-plane): 5879 region points of B onto 18431 of A, pairs farther than 3 ds dropped; 4 iterations (converged), RMS 0.01243 -> 0.002015 over 5879 -> 5879 pairs; turned a further 0.43 deg, moved 0.02188 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00039",
+   "verdict": true,
+   "ransac_rot_deg": 4.181153833898779,
+   "ransac_rms_pct_D": 3.5559550572714094,
+   "icp_rot_deg": 0.06082610069897956,
+   "icp_rms_pct_D": 0.0837123254754658,
+   "icp_log": "ICP (point-to-plane): 5203 region points of B onto 18112 of A, pairs farther than 3 ds dropped; 5 iterations (converged), RMS 0.02137 -> 0.004164 over 4800 -> 5203 pairs; turned a further 4.19 deg, moved 0.04072 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00040",
+   "verdict": true,
+   "ransac_rot_deg": 78.94428262244263,
+   "ransac_rms_pct_D": 10.570736322966573,
+   "icp_rot_deg": 0.661904211811979,
+   "icp_rms_pct_D": 0.7098133621289111,
+   "icp_log": "ICP (point-to-plane): 1880 region points of B onto 16775 of A, pairs farther than 3 ds dropped; 26 iterations (converged), RMS 0.02409 -> 0.006522 over 747 -> 1880 pairs; turned a further 78.59 deg, moved 0.1228 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00041",
+   "verdict": true,
+   "ransac_rot_deg": 163.72424698516357,
+   "ransac_rms_pct_D": 49.67262085296089,
+   "icp_rot_deg": 172.28171588200013,
+   "icp_rms_pct_D": 48.444416329351874,
+   "icp_log": "ICP (point-to-plane): 15912 region points of B onto 18577 of A, pairs farther than 3 ds dropped; 45 iterations (converged), RMS 0.02209 -> 0.02218 over 7610 -> 6214 pairs; turned a further 42.88 deg, moved 0.1203 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00042",
+   "verdict": true,
+   "ransac_rot_deg": 1.0595299274501857,
+   "ransac_rms_pct_D": 3.228582747304308,
+   "icp_rot_deg": 0.23859518842547725,
+   "icp_rms_pct_D": 0.2867108679456962,
+   "icp_log": "ICP (point-to-plane): 12725 region points of B onto 17406 of A, pairs farther than 3 ds dropped; 5 iterations (converged), RMS 0.0201 -> 0.005533 over 12714 -> 12725 pairs; turned a further 1.02 deg, moved 0.04308 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00043",
+   "verdict": false,
+   "ransac_rot_deg": 7.712249294918066,
+   "ransac_rms_pct_D": 6.76259151450739,
+   "icp_rot_deg": 0.1657941669472154,
+   "icp_rms_pct_D": 0.16512733918233247,
+   "icp_log": "ICP (point-to-plane): 8997 region points of B onto 17668 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.02694 -> 0.005241 over 3585 -> 8997 pairs; turned a further 7.57 deg, moved 0.09544 -- datc.pose.icp"
+  },
+  {
+   "object": "00_00044",
+   "verdict": true,
+   "ransac_rot_deg": 1.786721241098757,
+   "ransac_rms_pct_D": 2.955700586593101,
+   "icp_rot_deg": 0.7961201321861547,
+   "icp_rms_pct_D": 0.8705230352268856,
+   "icp_log": "ICP (point-to-plane): 18060 region points of B onto 16143 of A, pairs farther than 3 ds dropped; 5 iterations (converged), RMS 0.01376 -> 0.007716 over 18060 -> 18060 pairs; turned a further 1.00 deg, moved 0.02721 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01000",
+   "verdict": true,
+   "ransac_rot_deg": 13.648290935184555,
+   "ransac_rms_pct_D": 5.013730539740983,
+   "icp_rot_deg": 7.016382089575389,
+   "icp_rms_pct_D": 2.192834263699932,
+   "icp_log": "ICP (point-to-plane): 1637 region points of B onto 14329 of A, pairs farther than 3 ds dropped; 21 iterations (converged), RMS 0.01996 -> 0.004757 over 1637 -> 1637 pairs; turned a further 7.82 deg, moved 0.04101 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01001",
+   "verdict": true,
+   "ransac_rot_deg": 3.45019870400139,
+   "ransac_rms_pct_D": 2.473428320993411,
+   "icp_rot_deg": 0.9181826587212497,
+   "icp_rms_pct_D": 0.4537199568768059,
+   "icp_log": "ICP (point-to-plane): 4075 region points of B onto 18753 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.01477 -> 0.0061 over 4075 -> 4075 pairs; turned a further 4.35 deg, moved 0.0304 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01002",
+   "verdict": true,
+   "ransac_rot_deg": 2.8640594093800655,
+   "ransac_rms_pct_D": 4.026216288883251,
+   "icp_rot_deg": 0.5803633495260335,
+   "icp_rms_pct_D": 1.271799293527164,
+   "icp_log": "ICP (point-to-plane): 6892 region points of B onto 16727 of A, pairs farther than 3 ds dropped; 5 iterations (converged), RMS 0.01524 -> 0.006495 over 6849 -> 6892 pairs; turned a further 2.35 deg, moved 0.03877 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01004",
+   "verdict": true,
+   "ransac_rot_deg": 2.9632500058975557,
+   "ransac_rms_pct_D": 3.3135331097401712,
+   "icp_rot_deg": 1.0919944654295703,
+   "icp_rms_pct_D": 1.0429814079805781,
+   "icp_log": "ICP (point-to-plane): 12407 region points of B onto 18118 of A, pairs farther than 3 ds dropped; 5 iterations (converged), RMS 0.01316 -> 0.006369 over 12359 -> 12407 pairs; turned a further 1.91 deg, moved 0.03156 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01005",
+   "verdict": true,
+   "ransac_rot_deg": 4.86955658462814,
+   "ransac_rms_pct_D": 3.2396235799846282,
+   "icp_rot_deg": 0.289139530565309,
+   "icp_rms_pct_D": 0.49853720028455395,
+   "icp_log": "ICP (point-to-plane): 3657 region points of B onto 17048 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.01883 -> 0.005884 over 3657 -> 3657 pairs; turned a further 4.70 deg, moved 0.03837 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01006",
+   "verdict": true,
+   "ransac_rot_deg": 0.5082846962627721,
+   "ransac_rms_pct_D": 2.8820357540990997,
+   "icp_rot_deg": 3.9596342257425508,
+   "icp_rms_pct_D": 1.396614054805857,
+   "icp_log": "ICP (point-to-plane): 3465 region points of B onto 16278 of A, pairs farther than 3 ds dropped; 15 iterations (converged), RMS 0.01442 -> 0.004473 over 3465 -> 3465 pairs; turned a further 3.97 deg, moved 0.02233 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01007",
+   "verdict": true,
+   "ransac_rot_deg": 0.927309064343626,
+   "ransac_rms_pct_D": 2.1098062463497054,
+   "icp_rot_deg": 0.423538414479463,
+   "icp_rms_pct_D": 0.6617010918669186,
+   "icp_log": "ICP (point-to-plane): 6259 region points of B onto 18095 of A, pairs farther than 3 ds dropped; 4 iterations (converged), RMS 0.008892 -> 0.006499 over 6259 -> 6259 pairs; turned a further 0.56 deg, moved 0.01994 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01008",
+   "verdict": true,
+   "ransac_rot_deg": 3.9518686552280387,
+   "ransac_rms_pct_D": 3.2393122235792196,
+   "icp_rot_deg": 0.6699993153390073,
+   "icp_rms_pct_D": 0.45020694901351893,
+   "icp_log": "ICP (point-to-plane): 9858 region points of B onto 18581 of A, pairs farther than 3 ds dropped; 10 iterations (converged), RMS 0.01571 -> 0.005871 over 9858 -> 9858 pairs; turned a further 3.30 deg, moved 0.03861 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01009",
+   "verdict": true,
+   "ransac_rot_deg": 1.8038562943034158,
+   "ransac_rms_pct_D": 2.585490396766343,
+   "icp_rot_deg": 2.3015945500097983,
+   "icp_rms_pct_D": 1.439450903002568,
+   "icp_log": "ICP (point-to-plane): 5785 region points of B onto 14624 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.01147 -> 0.005056 over 5785 -> 5785 pairs; turned a further 4.08 deg, moved 0.03106 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01010",
+   "verdict": true,
+   "ransac_rot_deg": 1.9212479342619206,
+   "ransac_rms_pct_D": 2.698412600259382,
+   "icp_rot_deg": 0.4836074020522496,
+   "icp_rms_pct_D": 0.8885667148834869,
+   "icp_log": "ICP (point-to-plane): 8682 region points of B onto 19689 of A, pairs farther than 3 ds dropped; 4 iterations (converged), RMS 0.01108 -> 0.007165 over 8677 -> 8682 pairs; turned a further 1.46 deg, moved 0.02533 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01012",
+   "verdict": true,
+   "ransac_rot_deg": 0.9236893793475972,
+   "ransac_rms_pct_D": 2.843208367302124,
+   "icp_rot_deg": 0.1870868469455744,
+   "icp_rms_pct_D": 0.6272721967056293,
+   "icp_log": "ICP (point-to-plane): 5954 region points of B onto 17685 of A, pairs farther than 3 ds dropped; 8 iterations (converged), RMS 0.01374 -> 0.005828 over 5954 -> 5954 pairs; turned a further 0.77 deg, moved 0.03139 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01013",
+   "verdict": true,
+   "ransac_rot_deg": 0.47723210931991766,
+   "ransac_rms_pct_D": 2.940539069190013,
+   "icp_rot_deg": 0.679288537711579,
+   "icp_rms_pct_D": 1.4829238997696261,
+   "icp_log": "ICP (point-to-plane): 8463 region points of B onto 17616 of A, pairs farther than 3 ds dropped; 7 iterations (converged), RMS 0.01126 -> 0.003946 over 8463 -> 8463 pairs; turned a further 0.34 deg, moved 0.02091 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01014",
+   "verdict": true,
+   "ransac_rot_deg": 2.3113877881247484,
+   "ransac_rms_pct_D": 3.2226862824236404,
+   "icp_rot_deg": 0.2551268863845206,
+   "icp_rms_pct_D": 0.5919724347534853,
+   "icp_log": "ICP (point-to-plane): 6935 region points of B onto 18079 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.01425 -> 0.006184 over 6935 -> 6935 pairs; turned a further 2.07 deg, moved 0.0366 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01015",
+   "verdict": true,
+   "ransac_rot_deg": 1.6148299465834781,
+   "ransac_rms_pct_D": 2.7119039589725196,
+   "icp_rot_deg": 0.5867241533823325,
+   "icp_rms_pct_D": 0.7030812144524193,
+   "icp_log": "ICP (point-to-plane): 7717 region points of B onto 19304 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.01202 -> 0.006497 over 7717 -> 7717 pairs; turned a further 1.12 deg, moved 0.02811 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01016",
+   "verdict": true,
+   "ransac_rot_deg": 5.34133624607888,
+   "ransac_rms_pct_D": 3.7578149182846547,
+   "icp_rot_deg": 1.5856051181622282,
+   "icp_rms_pct_D": 0.7348652204005116,
+   "icp_log": "ICP (point-to-plane): 5288 region points of B onto 17519 of A, pairs farther than 3 ds dropped; 7 iterations (converged), RMS 0.01727 -> 0.005343 over 5288 -> 5288 pairs; turned a further 3.83 deg, moved 0.03857 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01017",
+   "verdict": true,
+   "ransac_rot_deg": 1.6985837120538612,
+   "ransac_rms_pct_D": 3.219763864980304,
+   "icp_rot_deg": 1.1160553691927422,
+   "icp_rms_pct_D": 0.34103907158685026,
+   "icp_log": "ICP (point-to-plane): 5371 region points of B onto 18640 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.02183 -> 0.004974 over 5371 -> 5371 pairs; turned a further 2.79 deg, moved 0.04043 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01018",
+   "verdict": true,
+   "ransac_rot_deg": 1.209785789055664,
+   "ransac_rms_pct_D": 2.94468684060043,
+   "icp_rot_deg": 1.5972254259434777,
+   "icp_rms_pct_D": 1.0127039823325443,
+   "icp_log": "ICP (point-to-plane): 4031 region points of B onto 18118 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.01706 -> 0.006451 over 4031 -> 4031 pairs; turned a further 1.83 deg, moved 0.03026 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01020",
+   "verdict": true,
+   "ransac_rot_deg": 5.871649791114767,
+   "ransac_rms_pct_D": 6.88445785327537,
+   "icp_rot_deg": 0.7828716554337427,
+   "icp_rms_pct_D": 1.3933114374729834,
+   "icp_log": "ICP (point-to-plane): 11274 region points of B onto 19561 of A, pairs farther than 3 ds dropped; 6 iterations (converged), RMS 0.02136 -> 0.005774 over 10226 -> 11274 pairs; turned a further 5.68 deg, moved 0.05814 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01021",
+   "verdict": true,
+   "ransac_rot_deg": 3.7274238987018613,
+   "ransac_rms_pct_D": 3.076731973974994,
+   "icp_rot_deg": 0.4587093813669875,
+   "icp_rms_pct_D": 0.5295928105811194,
+   "icp_log": "ICP (point-to-plane): 15614 region points of B onto 19448 of A, pairs farther than 3 ds dropped; 4 iterations (converged), RMS 0.01559 -> 0.006895 over 15481 -> 15614 pairs; turned a further 3.93 deg, moved 0.03031 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01023",
+   "verdict": true,
+   "ransac_rot_deg": 2.1186308502267064,
+   "ransac_rms_pct_D": 2.9614066340792307,
+   "icp_rot_deg": 1.0562746216600762,
+   "icp_rms_pct_D": 1.0673194895996412,
+   "icp_log": "ICP (point-to-plane): 10275 region points of B onto 19956 of A, pairs farther than 3 ds dropped; 7 iterations (converged), RMS 0.01318 -> 0.006508 over 10275 -> 10275 pairs; turned a further 1.75 deg, moved 0.02561 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01024",
+   "verdict": true,
+   "ransac_rot_deg": 1.207903243337558,
+   "ransac_rms_pct_D": 3.0512769384640888,
+   "icp_rot_deg": 1.6833202092474613,
+   "icp_rms_pct_D": 1.9474441161924854,
+   "icp_log": "ICP (point-to-plane): 8355 region points of B onto 19475 of A, pairs farther than 3 ds dropped; 4 iterations (converged), RMS 0.01358 -> 0.005396 over 8244 -> 8355 pairs; turned a further 2.77 deg, moved 0.02644 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01031",
+   "verdict": true,
+   "ransac_rot_deg": 2.5753438286624575,
+   "ransac_rms_pct_D": 3.4213040233560945,
+   "icp_rot_deg": 0.8013514643809451,
+   "icp_rms_pct_D": 1.5794238917349375,
+   "icp_log": "ICP (point-to-plane): 7979 region points of B onto 19218 of A, pairs farther than 3 ds dropped; 4 iterations (converged), RMS 0.01583 -> 0.004425 over 7979 -> 7979 pairs; turned a further 3.31 deg, moved 0.02473 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01034",
+   "verdict": true,
+   "ransac_rot_deg": 2.377502155929437,
+   "ransac_rms_pct_D": 3.1584752465244725,
+   "icp_rot_deg": 0.5946629557758369,
+   "icp_rms_pct_D": 1.5330069723312512,
+   "icp_log": "ICP (point-to-plane): 6807 region points of B onto 15114 of A, pairs farther than 3 ds dropped; 5 iterations (converged), RMS 0.01722 -> 0.004099 over 6807 -> 6807 pairs; turned a further 2.29 deg, moved 0.0247 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01036",
+   "verdict": true,
+   "ransac_rot_deg": 0.7348300525187887,
+   "ransac_rms_pct_D": 3.1513858467014844,
+   "icp_rot_deg": 0.7099455953464511,
+   "icp_rms_pct_D": 1.4414775131088322,
+   "icp_log": "ICP (point-to-plane): 6530 region points of B onto 19778 of A, pairs farther than 3 ds dropped; 4 iterations (converged), RMS 0.01322 -> 0.004706 over 6530 -> 6530 pairs; turned a further 1.22 deg, moved 0.02409 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01037",
+   "verdict": true,
+   "ransac_rot_deg": 164.1111641785232,
+   "ransac_rms_pct_D": 23.862574814942292,
+   "icp_rot_deg": 153.86875747234785,
+   "icp_rms_pct_D": 23.85166990911097,
+   "icp_log": "ICP (point-to-plane): 17914 region points of B onto 17153 of A, pairs farther than 3 ds dropped; 39 iterations (converged), RMS 0.01875 -> 0.01838 over 11277 -> 10910 pairs; turned a further 23.70 deg, moved 0.02866 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01038",
+   "verdict": true,
+   "ransac_rot_deg": 1.4011269486428566,
+   "ransac_rms_pct_D": 3.2471562868947927,
+   "icp_rot_deg": 0.7816695243967269,
+   "icp_rms_pct_D": 0.5286968001615037,
+   "icp_log": "ICP (point-to-plane): 12342 region points of B onto 19108 of A, pairs farther than 3 ds dropped; 4 iterations (converged), RMS 0.01555 -> 0.005951 over 12318 -> 12342 pairs; turned a further 0.75 deg, moved 0.03669 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01039",
+   "verdict": true,
+   "ransac_rot_deg": 2.7433751815688305,
+   "ransac_rms_pct_D": 2.8559060660464963,
+   "icp_rot_deg": 0.361070314310575,
+   "icp_rms_pct_D": 1.6177954253286158,
+   "icp_log": "ICP (point-to-plane): 3539 region points of B onto 19972 of A, pairs farther than 3 ds dropped; 5 iterations (converged), RMS 0.01037 -> 0.004313 over 3539 -> 3539 pairs; turned a further 2.47 deg, moved 0.01349 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01040",
+   "verdict": true,
+   "ransac_rot_deg": 7.775037121241233,
+   "ransac_rms_pct_D": 3.413448746676821,
+   "icp_rot_deg": 1.3613122932921242,
+   "icp_rms_pct_D": 0.5230421101028038,
+   "icp_log": "ICP (point-to-plane): 3378 region points of B onto 15241 of A, pairs farther than 3 ds dropped; 7 iterations (converged), RMS 0.01568 -> 0.004369 over 3378 -> 3378 pairs; turned a further 6.59 deg, moved 0.03288 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01041",
+   "verdict": true,
+   "ransac_rot_deg": 2.481788551360192,
+   "ransac_rms_pct_D": 2.7626437890277695,
+   "icp_rot_deg": 0.8864793657590146,
+   "icp_rms_pct_D": 1.3531569337830658,
+   "icp_log": "ICP (point-to-plane): 7653 region points of B onto 17131 of A, pairs farther than 3 ds dropped; 5 iterations (converged), RMS 0.01377 -> 0.005161 over 7653 -> 7653 pairs; turned a further 2.38 deg, moved 0.01981 -- datc.pose.icp"
+  },
+  {
+   "object": "01_01043",
+   "verdict": true,
+   "ransac_rot_deg": 1.8403356442627679,
+   "ransac_rms_pct_D": 2.541532116680129,
+   "icp_rot_deg": 1.0382307649157814,
+   "icp_rms_pct_D": 1.2349460266772665,
+   "icp_log": "ICP (point-to-plane): 11908 region points of B onto 16013 of A, pairs farther than 3 ds dropped; 4 iterations (converged), RMS 0.009668 -> 0.00619 over 11908 -> 11908 pairs; turned a further 0.95 deg, moved 0.01876 -- datc.pose.icp"
+  }
+ ]
+}

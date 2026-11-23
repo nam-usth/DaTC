@@ -12,7 +12,7 @@ license = {text = "MIT"}
 dependencies = ["numpy>=1.24", "scipy>=1.10", "pyvista>=0.43", "numba>=0.57", "scikit-learn>=1.2"]
 
 [project.optional-dependencies]
-app = ["PyQt5>=5.15", "pyvistaqt>=0.11", "matplotlib>=3.6"]
+app = ["PyQt5>=5.15", "pyvistaqt>=0.11", "matplotlib>=3.6", "imageio>=2.30"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

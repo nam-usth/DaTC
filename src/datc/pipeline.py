@@ -44,6 +44,8 @@ class Settings:
     na: int = 9
     nb: int = 5
     min_pts: int = 40
+    icp: bool = False           # refine the RANSAC pose by ICP on the fracture regions
+    icp_tau_ds: float = 3.0     # ICP rejection distance, in ds (the RANSAC inlier distance, reused)
 
 
 @dataclass
@@ -64,6 +66,7 @@ class PairResult:
     verdict: dict               # match / no match, the rule and its measured rates
     timings: dict = field(default_factory=dict)
     log: list = field(default_factory=list)
+    pose_icp: dict | None = None  # ICP refinement of `pose` (Settings.icp), or None
 
 
 def load_mask(path: str, n_points: int) -> np.ndarray:
@@ -207,10 +210,52 @@ def run_pair(mesh_a, mesh_b, st: Settings, mask_a=None, mask_b=None, alphabet: A
     t2 = time.time()
     m = match_rims(rims[0], rims[1], ds, rims[0]["bulk"], rims[1]["bulk"], st.na, st.nb, alphabet, log)
     tm["match"] = time.time() - t2
+    pose_icp = None
+    if st.icp:
+        say(90, "ICP")
+        t3 = time.time()
+        pose_icp = icp_refine(mesh_a, fa, mesh_b, fb, m["pose"], ds, st.icp_tau_ds, log)
+        tm["icp"] = time.time() - t3
     say(100, "done")
     return PairResult(st, float(ds), (fa, fb), tuple(rims), m["alphabet"], m["alphabet_source"], m["symbols"],
                       m["score"], m["raw"], m["direction"], m["path"], m["pose"], m["features"], m["verdict"],
-                      tm, log)
+                      tm, log, pose_icp)
+
+
+def region_points(mesh, fmask, max_pts=20000):
+    """Vertices of the region faces and their vertex normals, every k-th one so that at most max_pts remain."""
+    idx = np.unique(G.faces_of(mesh)[fmask])
+    idx = idx[::max(1, int(np.ceil(len(idx) / max_pts)))]
+    N = np.asarray(mesh.point_normals)[idx]
+    return np.asarray(mesh.points)[idx], N / (np.linalg.norm(N, axis=1, keepdims=True) + 1e-12)
+
+
+def icp_refine(mesh_a, fa, mesh_b, fb, pose, ds, tau_ds=3.0, log=None):
+    """Refine the RANSAC pose of B by point-to-plane ICP of B's fracture-region vertices onto A's.
+
+    Post-processing for display: the verdict is not changed (its thresholds were
+    measured on the RANSAC fit). Returns the pose dict extended with the ICP
+    numbers, or None (with the reason in the log) when it cannot run."""
+    log = [] if log is None else log
+    if pose["R"] is None:
+        log.append("ICP: not run, RANSAC gave no pose to start from")
+        return None
+    (A, NA), (B, _) = region_points(mesh_a, fa), region_points(mesh_b, fb)
+    r = PO.icp(B, A, pose["R"], pose["t"], tau_ds * ds, dst_normals=NA)
+    if r is None:
+        log.append(f"ICP: not run, fewer than 10 of B's {len(B)} region points lie within {tau_ds:g} ds of A's "
+                   "region after the RANSAC fit")
+        return None
+    out = dict(pose, R=r["R"], t=r["t"], rotation_deg=PO.rotation_angle(r["R"]),
+               change_deg=PO.rotation_angle(r["R"] @ pose["R"].T),
+               change_t=float(np.linalg.norm(B.mean(0) @ r["R"].T + r["t"] - (B.mean(0) @ pose["R"].T + pose["t"]))),
+               icp=r, n_src=len(B), n_dst=len(A), tau=tau_ds * ds)
+    log.append(f"ICP ({r['metric']}): {len(B)} region points of B onto {len(A)} of A, pairs farther than "
+               f"{tau_ds:g} ds dropped; "
+               f"{r['iters']} iterations ({'converged' if r['converged'] else 'stopped'}), RMS {r['rms0']:.4g} -> "
+               f"{r['rms']:.4g} over {r['kept0']} -> {r['kept']} pairs; turned a further {out['change_deg']:.2f} deg, "
+               f"moved {out['change_t']:.4g} -- datc.pose.icp")
+    return out
 
 
 def match_rims(rimA, rimB, ds, bulkA, bulkB, na=9, nb=5, alphabet=None, log=None):

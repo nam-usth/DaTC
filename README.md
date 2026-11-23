@@ -16,7 +16,38 @@ travel. The repository reproduces Table II of the paper from the meshes and
 contains **DaTC Studio**, a PyQt application that runs the method on a pair of
 fragments and shows each step.
 
-![DaTC Studio](figures/app/selftest_00_00002_window.png)
+![DaTC pairs a broken mug and its missing piece](figures/demo_00_00008.gif)
+
+*Fantastic Breaks object 00_00008. The two rims are matched by their Darboux turn
+code; the piece is then placed by RANSAC on the matched samples and refined by
+ICP on the fracture surfaces. The verdict is MATCH. Made with
+`python app/datc_studio.py --gif E:\Fantastic_break\00\00008 figures/demo_00_00008.gif --icp`.
+It was picked for its good placement: of the 60 mated pairs of the retrieval
+pool it has the lowest RMS error after RANSAC and the third lowest after ICP. Over
+all 60, ICP puts B within 2% of the diagonal D of its supplied pose for 47 pairs
+(RANSAC alone: 3), and 12 pairs stay more than 30 degrees off (see* Placement
+*below).*
+
+## Download
+
+Ready-to-run builds for Windows and Linux (x64) are on the
+[releases page](https://github.com/nam-usth/DaTC/releases): unpack the archive
+and start `DaTCStudio` (`DaTCStudio.exe` on Windows). No Python is needed. The
+console program `datc` in the same folder runs the command-line uses:
+
+```
+datc --version
+datc --selftest <Fantastic Breaks object folder> out.png
+datc --gif <Fantastic Breaks object folder> out.gif --icp
+datc --run-script experiments/make_table1.py
+```
+
+The *Retrieval* tab's four steps run the scripts of `experiments/` through
+`datc --run-script`. The Linux build was made on Ubuntu 22.04 (glibc 2.35) and
+needs the usual X11/OpenGL libraries of a desktop installation. The Windows
+build is made with `python packaging/build_release.py` from the conda
+environment of `environment.yml` plus PyInstaller 6.21.0; the Linux build by
+`.github/workflows/release-linux.yml` with the same script.
 
 ## Contents
 
@@ -31,7 +62,7 @@ src/datc/
   normalise.py    z and rank transforms of the tuned comparison
   stats.py        expected-tie top-k, object-level sign test, ROC AUC / AP
   datasets.py     Fantastic Breaks and PRESIOUS loaders, the three rim pools
-  pose.py         RANSAC + Kabsch placement from the matched samples
+  pose.py         RANSAC + Kabsch placement from the matched samples; point-to-plane ICP
   pipeline.py     one pair of fragments end to end, with placement and match verdict (used by the app)
 experiments/
   build_pools.py      the three rim pools, cached under cache/
@@ -40,6 +71,7 @@ experiments/
   make_table1.py      prints Table II and checks every cell against the paper
   pair_verdict.py     fits and measures the app's match / no-match rule
 app/datc_studio.py    DaTC Studio (PyQt5 + PyVista)
+packaging/            PyInstaller spec and the release build script
 splits/               the object lists of every pool and split
 reference/            the values printed in the paper (make_table1.py) and the verdict rule (verdict.json)
 tests/                kernels against slow references; invariance and tie-rule checks
@@ -125,15 +157,55 @@ fracture regions, the two rims, the samples the alignment matched, and the
 Darboux frame (t, g, n) at a sample chosen with the slider; below it, alpha and
 beta of rim A with the aligned samples of rim B, and a log naming the function
 behind every step. B can be placed by the RANSAC fit of the matched samples,
-and the pairing exported as a GIF. A MATCH / NO MATCH verdict is always shown.
-The computation runs in a worker thread.
+optionally refined by ICP, and the pairing exported as a GIF. A MATCH / NO
+MATCH verdict is always shown. The computation runs in a worker thread.
 *Retrieval* tab: run the four reproduction steps, then browse each query's
 ranking. A selected query and its first candidate (or its mate) are drawn in a
-2 x 3 grid: the two fragments, the RANSAC placement; the two rims coloured by
-their code, and the Smith-Waterman matches between them.
+2 x 3 grid: the two fragments, the placement; the two rims coloured by their
+code, and the Smith-Waterman matches between them.
+*Help* tab: `app/README.md`.
+
+![DaTC Studio, Pair tab](figures/app/selftest_00_00002_window.png)
 
 ![Retrieval tab](figures/app/selftest_00_00002_retrieval_mate.png)
-*Help* tab: `app/README.md`.
+
+A pairing GIF without the window:
+
+```
+python app/datc_studio.py --gif E:\Fantastic_break\00\00008 pairing.gif [--icp]
+```
+
+### Placement
+
+RANSAC (Fischler and Bolles 1981) fits a rigid transform to the matched rim
+samples: 2000 minimal samples of three pairs, Kabsch on each, inliers within
+3 ds, refit on the largest consensus. Of the two directions of travel, the one
+whose fracture planes face each other is kept. *Refine by ICP on the fracture
+regions* (Placement group) then runs point-to-plane ICP (Chen and Medioni 1992)
+of B's fracture-region vertices onto A's, from the RANSAC pose; point pairs
+farther apart than the reject distance (default 3 ds, the RANSAC inlier
+distance, not tuned) are dropped. ICP changes the placement only; the verdict
+stays on the RANSAC fit, which its thresholds were measured with.
+
+Measured by `experiments/placement_icp.py` on the 60 mated pairs of the Fantastic
+Breaks retrieval pool (`results/placement_icp/placement_icp.json`), against the
+pose the dataset supplies; D is the bounding-box diagonal of the assembled pair:
+
+| pairs out of 60 | RANSAC | RANSAC + ICP |
+|---|---|---|
+| RMS error within 1% of D | 1 | 30 |
+| RMS error within 2% of D | 3 | 47 |
+| RMS error within 5% of D | 40 | 48 |
+| rotation error below 5 degrees | 38 | 47 |
+| rotation error below 30 degrees | 44 | 48 |
+| median RMS error (% of D) | 3.24 | 0.95 |
+
+ICP lowered the RMS error on 53 pairs and raised it on 6. On 12 pairs the result
+stays more than 30 degrees off: ICP starts from the RANSAC pose and cannot undo a
+turned-over one. The parameters were not tuned. The counterpart of a Fantastic
+Breaks pair is computed by the dataset from the broken piece's own scan, so its
+fracture surface is close to a copy of the piece's and ICP has an easier target
+here than it would have between two independent scans.
 
 ### Match verdict
 

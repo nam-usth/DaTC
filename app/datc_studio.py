@@ -2,6 +2,8 @@
 
     python app/datc_studio.py [fragment_a.ply fragment_b.ply | fantastic_breaks_object_folder]
     python app/datc_studio.py --selftest <object folder> out.png   (headless check, saves screenshots)
+    python app/datc_studio.py --gif <object folder> out.gif [--icp]  (headless: the pairing GIF)
+    datc --run-script experiments/<script>.py [args]               (release only: run a script)
 
 Pair tab: two fragments in their assembled pose -> contact regions -> rims ->
 (alpha, beta) -> 9 x 5 symbols -> cyclic Smith-Waterman, drawn live (src/datc/pipeline.py).
@@ -24,7 +26,8 @@ import numpy as np
 
 __version__ = "1.0.0"
 SELFTEST = len(sys.argv) >= 4 and sys.argv[1] == "--selftest"
-ROOT = Path(__file__).resolve().parents[1]
+FROZEN = getattr(sys, "frozen", False)   # a PyInstaller release: the data folders sit next to the executable
+ROOT = Path(sys.executable).resolve().parent if FROZEN else Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 
@@ -47,7 +50,7 @@ try:
     from datc import datasets as DS  # noqa: E402
     from datc import geometry as G  # noqa: E402
     from datc.alphabet import Alphabet  # noqa: E402
-    from datc.pipeline import Settings, frame_at, load_mask, match_rims, run_pair  # noqa: E402
+    from datc.pipeline import Settings, frame_at, icp_refine, load_mask, match_rims, run_pair  # noqa: E402
     from scipy.spatial.transform import Rotation, Slerp  # noqa: E402
 except Exception:
     if SELFTEST:
@@ -130,8 +133,8 @@ class Region(QtWidgets.QGroupBox):
         super().mousePressEvent(e)
 
 
-def verdict_html(v, f, pose):
-    """The verdict in colour, the two inputs, and the measured rates of the rule."""
+def verdict_html(v, f, pose, pose_icp=None, icp_note=None):
+    """The verdict in colour, the two inputs, the measured rates of the rule, and the ICP refinement."""
     if v["match"] is None:
         head = "<b>no verdict</b>"
     else:
@@ -143,6 +146,13 @@ def verdict_html(v, f, pose):
                      f"B turned by {pose['rotation_deg']:.1f}&deg;")
     else:
         lines.append("RANSAC: no pose (no consensus of 3 samples)")
+    if pose_icp is not None:
+        r = pose_icp["icp"]
+        lines.append(f"ICP: RMS {r['rms0']:.3g} &rarr; {r['rms']:.3g} over {r['kept']} region points, "
+                     f"{r['iters']} iterations; B turned a further {pose_icp['change_deg']:.2f}&deg; "
+                     "(placement only, the verdict uses RANSAC)")
+    elif icp_note:
+        lines.append(f"ICP: {icp_note}")
     lines.append(f"<span style='color:#555'>{v['text'].split(': ', 1)[-1]}</span>")
     return "<br>".join(lines)
 
@@ -205,6 +215,24 @@ class LoadWorker(QtCore.QThread):
             self.failed.emit(traceback.format_exc())
 
 
+class IcpWorker(QtCore.QThread):
+    """ICP refinement of a finished pair, off the main thread."""
+    done = QtCore.pyqtSignal(object, object, float)
+    failed = QtCore.pyqtSignal(str)
+
+    def __init__(self, ma, fa, mb, fb, pose, ds, tau_ds):
+        super().__init__()
+        self.args = (ma, fa, mb, fb, pose, ds, tau_ds)
+
+    def run(self):
+        try:
+            log = []
+            out = icp_refine(*self.args, log=log)
+            self.done.emit(out, log, self.args[-1])
+        except Exception:
+            self.failed.emit(traceback.format_exc())
+
+
 class RetrievalWorker(QtCore.QThread):
     """Load the two fragments of a retrieval pair and run match_rims on their pool rims.
 
@@ -214,9 +242,19 @@ class RetrievalWorker(QtCore.QThread):
     done = QtCore.pyqtSignal(object)
     failed = QtCore.pyqtSignal(str)
 
-    def __init__(self, pool, items, cache, roots, key):
+    def __init__(self, pool, items, cache, roots, key, icp_tau=None):
         super().__init__()
         self.pool, self.items, self.cache, self.roots, self.key = pool, items, cache, roots, key
+        self.icp_tau = icp_tau      # ICP reject distance in ds, or None for no ICP
+
+    def _region(self, x, new):
+        """Fracture region of a Fantastic Breaks rim: contact with its own mate, the rule that built the pool."""
+        k = f"fbmask:{x['object']}"
+        if k not in self.cache and k not in new:
+            m = (self.cache.get(f"fb:{x['object']}") or new[f"fb:{x['object']}"])
+            fb_, fr_, _, _ = DS.fb_masks(m["b"], m["r"])
+            new[k] = {"b": fb_, "r": fr_}
+        return (self.cache.get(k) or new[k])[x["side"]]
 
     def _mesh(self, x, new):
         if self.pool == "fb":
@@ -246,6 +284,18 @@ class RetrievalWorker(QtCore.QThread):
             log = []
             r = match_rims(rims[0], rims[1], float(self.items[0]["ds"]),
                            np.asarray(meshes[0].points).mean(0), np.asarray(meshes[1].points).mean(0), log=log)
+            r["pose_icp"], r["icp_note"] = None, None
+            if self.icp_tau is not None:
+                if self.pool == "fb":
+                    f1, f2 = self._region(self.items[0], new), self._region(self.items[1], new)
+                    r["pose_icp"] = icp_refine(meshes[0], f1, meshes[1], f2, r["pose"], float(self.items[0]["ds"]),
+                                               self.icp_tau, log)
+                    if r["pose_icp"] is None:
+                        r["icp_note"] = log[-1].split(": ", 1)[-1]
+                else:
+                    r["icp_note"] = ("not available for PRESIOUS pool rims (a fragment has one region per contact "
+                                     "component, and the pool does not store which faces belong to which rim)")
+                    log.append("ICP: " + r["icp_note"])
             r.update(rims=rims, meshes=meshes, new=new, log=log, key=self.key)
             self.done.emit(r)
         except Exception:
@@ -286,6 +336,10 @@ class Studio(QtWidgets.QMainWindow):
         self.r_pending = False
         self.rres = None
         self.rmesh_cache = {}
+        self.icp_worker = None
+        self.icp_again = False
+        self.icp_note = None
+        self.icp_tau_done = None
         self._build()
 
     # ------------------------------------------------------------------ layout
@@ -394,6 +448,17 @@ class Studio(QtWidgets.QMainWindow):
         code.content.addRow("beta bins", self.nb)
         code.content.addRow("bin edges", self.code_src)
         meth.content.addWidget(code)
+        plc = Region("Placement", BLUE, layout=QtWidgets.QFormLayout)
+        self.icp_chk = QtWidgets.QCheckBox("Refine by ICP on the fracture regions")
+        self.icp_chk.setToolTip("Post-processing: trimmed point-to-point ICP of B's fracture-region vertices onto "
+                                "A's, started from the RANSAC pose (datc.pose.icp). It changes the placement only.")
+        self.icp_tau = spin(0.5, 50, DEFAULTS.icp_tau_ds, 0.5, 1,
+                            "ICP drops point pairs farther apart than this, in sampling steps ds")
+        self.icp_chk.toggled.connect(self.update_icp)
+        self.icp_tau.valueChanged.connect(self.update_icp)
+        plc.content.addRow(self.icp_chk)
+        plc.content.addRow("ICP reject distance (ds)", self.icp_tau)
+        meth.content.addWidget(plc)
         r = QtWidgets.QHBoxLayout()
         bd = QtWidgets.QPushButton("Load default")
         bd.clicked.connect(self.load_default)
@@ -419,7 +484,7 @@ class Studio(QtWidgets.QMainWindow):
         for key, text, on in (("mesh", "Fragments", True), ("region", "Fracture regions", True),
                               ("rim", "Rims", True), ("arc", "Matched samples", True),
                               ("frame", "Darboux frame (t red, g green, n blue)", True),
-                              ("placed", "Place B by the RANSAC fit", False),
+                              ("placed", "Place B by the RANSAC fit (+ ICP if on)", False),
                               ("apart", "Pull the fragments apart", False)):
             c = QtWidgets.QCheckBox(text)
             c.setChecked(on)
@@ -540,6 +605,12 @@ class Studio(QtWidgets.QMainWindow):
         self.cand_box.currentIndexChanged.connect(self.show_query)
         cr.addWidget(self.cand_box, 1)
         brow.content.addLayout(cr)
+        self.ret_icp = QtWidgets.QCheckBox("Refine the placement by ICP (Fantastic Breaks)")
+        self.ret_icp.setToolTip("ICP of fragment 2's fracture region onto fragment 1's, from the RANSAC pose; "
+                                "reject distance as set in the Pair tab. Regions: contact with each fragment's own "
+                                "mate, the rule that built the pool rims.")
+        self.ret_icp.toggled.connect(self.show_query)
+        brow.content.addWidget(self.ret_icp)
         self.ret_verdict = QtWidgets.QLabel("")
         self.ret_verdict.setWordWrap(True)
         self.ret_verdict.setTextFormat(QtCore.Qt.RichText)
@@ -646,6 +717,8 @@ class Studio(QtWidgets.QMainWindow):
         self.normals.setCurrentText(DEFAULTS.normals)
         self.na.setValue(DEFAULTS.na)
         self.nb.setValue(DEFAULTS.nb)
+        self.icp_chk.setChecked(DEFAULTS.icp)
+        self.icp_tau.setValue(DEFAULTS.icp_tau_ds)
 
     def settings(self):
         return Settings(ds=self.ds.value(), ds_rel=0.01 if self.ds_auto.isChecked() else None,
@@ -695,13 +768,68 @@ class Studio(QtWidgets.QMainWindow):
         self.frame_slider.setRange(0, n - 1)
         self.frame_slider.setValue(int(res.path[len(res.path) // 2, 0]) if len(res.path) else 0)
         self.frame_slider.blockSignals(False)
-        self.verdict_label.setText(verdict_html(res.verdict, res.features, res.pose))
+        self.icp_note = None
+        self.show_verdict()
         self.status.setText(("MATCH" if res.verdict["match"] else "NO MATCH" if res.verdict["match"] is False
                              else "no verdict") + f": score {res.score:.4f} (SW / (n_A + n_B)), "
                             f"{len(res.path)} matched samples, {time.time() - self.t0:.1f} s")
         self.export_region.set_expanded(True)
         self.redraw()
         self.draw_codes()
+        self.update_icp()
+
+    def show_verdict(self):
+        res = self.result
+        if res is not None:
+            self.verdict_label.setText(verdict_html(res.verdict, res.features, res.pose,
+                                                    res.pose_icp if self.icp_chk.isChecked() else None,
+                                                    self.icp_note if self.icp_chk.isChecked() else None))
+
+    def update_icp(self, *_):
+        """Run ICP when it is switched on (or its distance changes) and the current result has none for it."""
+        res = self.result
+        if res is None:
+            return
+        if self.icp_chk.isChecked():
+            tau = self.icp_tau.value()
+            if getattr(self, "icp_tau_done", None) != tau or (res.pose_icp is None and self.icp_note is None):
+                if self.icp_worker is not None and self.icp_worker.isRunning():
+                    self.icp_again = True
+                    return
+                self.icp_again = False
+                self.status.setText("ICP on the fracture regions")
+                ma, mb = self.meshes
+                self.icp_worker = IcpWorker(ma, res.masks[0], mb, res.masks[1], res.pose, res.ds, tau)
+                self.icp_worker.done.connect(self._icp_done)
+                self.icp_worker.failed.connect(self.error)
+                self.icp_worker.start()
+                return
+        self.show_verdict()
+        self.redraw()
+
+    def _icp_done(self, pose_icp, log, tau):
+        res = self.result
+        res.pose_icp = pose_icp
+        self.icp_tau_done = tau
+        self.icp_note = None if pose_icp is not None else log[-1].split(": ", 1)[-1]
+        for s in log:
+            self.log(s)
+        self.status.setText(log[-1] if log else "ICP done")
+        if self.icp_again:
+            self.icp_again = False
+            self.update_icp()
+            return
+        self.show_verdict()
+        self.redraw()
+
+    def active_pose(self):
+        """The placement shown: the ICP refinement when it is on and ran, else the RANSAC pose."""
+        res = self.result
+        if res is None:
+            return None
+        if self.icp_chk.isChecked() and res.pose_icp is not None:
+            return res.pose_icp
+        return res.pose
 
     # ------------------------------------------------------------------ drawing
     def _offset(self):
@@ -717,8 +845,9 @@ class Studio(QtWidgets.QMainWindow):
         """4 x 4 transform applied to B: the RANSAC pose when 'Place B' is ticked, then the pull-apart offset."""
         T = np.eye(4)
         res = self.result
-        if res is not None and self.chk["placed"].isChecked() and res.pose["R"] is not None:
-            T[:3, :3], T[:3, 3] = res.pose["R"], res.pose["t"]
+        pose = self.active_pose()
+        if res is not None and self.chk["placed"].isChecked() and pose["R"] is not None:
+            T[:3, :3], T[:3, 3] = pose["R"], pose["t"]
         T[:3, 3] += self._offset()
         return T
 
@@ -825,12 +954,17 @@ class Studio(QtWidgets.QMainWindow):
                              t=None if res.pose["t"] is None else res.pose["t"].tolist(),
                              inliers=int(res.pose["inliers"].sum()), matched=len(res.pose["path"]),
                              rotation_deg=res.pose["rotation_deg"]))
+        pi = res.pose_icp if self.icp_chk.isChecked() else None
+        out["pose_icp"] = None if pi is None else dict(
+            R=pi["R"].tolist(), t=pi["t"].tolist(), rotation_deg=pi["rotation_deg"], change_deg=pi["change_deg"],
+            reject_distance=pi["tau"], region_points=[pi["n_src"], pi["n_dst"]],
+            **{k: pi["icp"][k] for k in ("rms0", "rms", "kept0", "kept", "iters", "converged")})
         Path(path).write_text(json.dumps(out, indent=1), encoding="utf-8")
         self.log(f"saved {path}")
         return path
 
     def save_gif(self, path=None, n_frames=40):
-        """B travels from 'pulled apart' to the RANSAC pose; the last frames hold the placement."""
+        """B travels from 'pulled apart' to the placement (RANSAC, + ICP when on); the last frames hold it."""
         res = self.result
         if res is None or res.pose["R"] is None:
             self.error("No placement to animate: run DaTC first (RANSAC must have found a pose).")
@@ -842,7 +976,8 @@ class Studio(QtWidgets.QMainWindow):
         self.status.setText("writing the GIF")
         QtWidgets.QApplication.processEvents()
         ma, mb = self.meshes
-        R, t = res.pose["R"], res.pose["t"]
+        pose = self.active_pose()
+        R, t = pose["R"], pose["t"]
         cB = np.asarray(mb.points).mean(0)
         L = float(np.linalg.norm(np.ptp(np.asarray(ma.points), 0)))
         away = cB - np.asarray(ma.points).mean(0)
@@ -858,7 +993,8 @@ class Studio(QtWidgets.QMainWindow):
         actorB = pl.add_mesh(mb, color=COL["meshB"], smooth_shading=True)
         actorRB = pl.add_mesh(pv.lines_from_points(rB, close=True).tube(radius=r_), color=COL["B"])
         word = "MATCH" if res.verdict["match"] else ("NO MATCH" if res.verdict["match"] is False else "")
-        pl.add_text(f"DaTC + RANSAC   {word}   score {res.features['score']:.3f}, "
+        how = "RANSAC + ICP" if pose is not res.pose else "RANSAC"
+        pl.add_text(f"DaTC + {how}   {word}   score {res.features['score']:.3f}, "
                     f"inliers {100 * res.features['inliers']:.0f}%", font_size=10, color="black")
         pl.camera_position = "iso"
         # frame everything that will be on screen: A, B apart, B placed
@@ -885,7 +1021,7 @@ class Studio(QtWidgets.QMainWindow):
         if self.proc is not None and self.proc.state() != QtCore.QProcess.NotRunning:
             self.script_log.appendPlainText("a script is already running")
             return
-        argv = ["-u", str(ROOT / script)]
+        argv = ["--run-script", str(ROOT / script)] if FROZEN else ["-u", str(ROOT / script)]
         if args == "roots":
             if self.fb_root.text().strip():
                 argv += ["--fb-root", self.fb_root.text().strip()]
@@ -899,11 +1035,14 @@ class Studio(QtWidgets.QMainWindow):
         self.proc.readyReadStandardOutput.connect(
             lambda: self.script_log.appendPlainText(bytes(self.proc.readAllStandardOutput()).decode("utf-8", "replace").rstrip()))
         self.proc.finished.connect(self._script_done)
-        self.script_log.appendPlainText(f"\n$ python {' '.join(argv[1:])}")
+        # a release runs the scripts with its console executable `datc`, which carries the bundled Python
+        exe = str(ROOT / ("datc.exe" if os.name == "nt" else "datc")) if FROZEN else sys.executable
+        shown = ["datc"] + argv if FROZEN else ["python"] + argv[1:]
+        self.script_log.appendPlainText(f"\n$ {' '.join(shown)}")
         for b in self.steps:
             b.setEnabled(False)
         self.stop_btn.setEnabled(True)
-        self.proc.start(sys.executable, argv)
+        self.proc.start(exe, argv)
 
     def _script_done(self, code, _status):
         self.script_log.appendPlainText(f"[exit code {code}]")
@@ -966,7 +1105,8 @@ class Studio(QtWidgets.QMainWindow):
         role = "mate" if other == j else "first candidate (not the mate)"
         self.ret_verdict.setText(f"matching query {self.ret['names'][i]} with its {role} "
                                  f"{self.ret['names'][other]} ...")
-        self.rworker = RetrievalWorker(self.ret["pool"], [items[i], items[other]], self.rmesh_cache, roots, key)
+        self.rworker = RetrievalWorker(self.ret["pool"], [items[i], items[other]], self.rmesh_cache, roots, key,
+                                       self.icp_tau.value() if self.ret_icp.isChecked() else None)
         self.rworker.done.connect(self._ret_done)
         self.rworker.failed.connect(self._ret_failed)
         self.rworker.start()
@@ -989,7 +1129,7 @@ class Studio(QtWidgets.QMainWindow):
         mate = self.ret["rows"][[q[0] for q in self.ret["rows"]].index(i)][1]
         role = "mate" if other == mate else "first candidate, not the mate"
         self.ret_verdict.setText(f"{names[i]} vs {names[other]} ({role})<br>"
-                                 + verdict_html(r["verdict"], r["features"], r["pose"]))
+                                 + verdict_html(r["verdict"], r["features"], r["pose"], r["pose_icp"], r["icp_note"]))
         self.script_log.appendPlainText("\n".join(r["log"]))
         self.draw_retrieval(r, names[i], names[other])
 
@@ -1022,12 +1162,16 @@ class Studio(QtWidgets.QMainWindow):
         p.add_mesh(meshes[0], color=COL["meshA"], smooth_shading=True)
         p.add_mesh(tube(P1), color=COL["A"])
         if pose["R"] is not None:
-            p.add_mesh(meshes[1].transform(T, inplace=False), color=COL["meshB"], smooth_shading=True, opacity=0.85)
-            p.add_mesh(tube((pose["R"] @ P2.T).T + pose["t"]), color=COL["B"])
+            pz = r["pose_icp"] if r["pose_icp"] is not None else pose
+            Tz = np.eye(4)
+            Tz[:3, :3], Tz[:3, 3] = pz["R"], pz["t"]
+            p.add_mesh(meshes[1].transform(Tz, inplace=False), color=COL["meshB"], smooth_shading=True, opacity=0.85)
+            p.add_mesh(tube((pz["R"] @ P2.T).T + pz["t"]), color=COL["B"])
             v = r["verdict"]
             head = "no verdict" if v["match"] is None else ("MATCH" if v["match"] else "NO MATCH")
-            title(f"{head}: fragment 2 placed by RANSAC\n{int(pose['inliers'].sum())} of {len(pose['path'])} "
-                  f"matched samples within 3 ds, turned {pose['rotation_deg']:.1f} deg",
+            how = f"RANSAC + ICP ({pz['change_deg']:.1f} deg more)" if pz is not pose else "RANSAC"
+            title(f"{head}: fragment 2 placed by {how}\n{int(pose['inliers'].sum())} of {len(pose['path'])} "
+                  f"matched samples within 3 ds, turned {pz['rotation_deg']:.1f} deg",
                   "#1a7f37" if v["match"] else "#c62828")
         else:
             title("NO MATCH: RANSAC found no pose\n(no consensus of 3 matched samples)", "#c62828")
@@ -1094,6 +1238,43 @@ def window_capture(w, plotter, path):
     img.save(path)
 
 
+def wait_icp(app, w, limit=600):
+    t0 = time.time()
+    app.processEvents()
+    while time.time() - t0 < limit and w.icp_worker is not None and (w.icp_worker.isRunning() or w.icp_again):
+        app.processEvents()
+        time.sleep(0.05)
+    app.processEvents()
+
+
+def make_gif(folder, out, icp):
+    """Headless: run DaTC on one Fantastic Breaks object folder and write the pairing GIF."""
+    app = QtWidgets.QApplication.instance() or QtWidgets.QApplication(sys.argv)
+    w = Studio()
+    w.headless = True
+    w.show()
+    w.open_folder(folder)
+    w.loader.wait()
+    app.processEvents()
+    if w.meshes is None:
+        raise SystemExit(f"could not load {folder}: {w.last_error}")
+    w.icp_chk.setChecked(icp)
+    w.run()
+    w.worker.wait()
+    app.processEvents()
+    if w.result is None:
+        raise SystemExit(f"DaTC failed: {w.last_error}")
+    if icp:
+        wait_icp(app, w)
+    path = w.save_gif(out)
+    if not path:
+        raise SystemExit(f"no GIF: {w.last_error}")
+    print(w.result.verdict["text"])
+    print(chr(10).join(s for s in w.log_box.toPlainText().splitlines() if s.startswith(("placement", "ICP"))))
+    print(f"GIF written: {path}")
+    w.close()
+
+
 def selftest(folder, png):
     """Headless: load a Fantastic Breaks object, run DaTC through the worker, check, save screenshots."""
     app = QtWidgets.QApplication.instance() or QtWidgets.QApplication(sys.argv)
@@ -1126,6 +1307,14 @@ def selftest(folder, png):
     w.save_json(png.replace(".png", ".json"))
     if res.verdict["match"] is None:
         selftest_failed("pair tab: no verdict (reference/verdict.json missing?)")
+    w.icp_chk.setChecked(True)
+    wait_icp(app, w)
+    if res.pose_icp is None:
+        selftest_failed(f"pair tab: ICP did not run ({w.icp_note or w.last_error})")
+    w.chk["placed"].setChecked(True)
+    app.processEvents()
+    w.save_png(png.replace(".png", "_icp.png"))
+    w.chk["placed"].setChecked(False)
     gif = w.save_gif(png.replace(".png", ".gif"), n_frames=16)
     if not gif or not Path(gif).exists():
         selftest_failed(f"pair tab: GIF not written ({w.last_error})")
@@ -1133,6 +1322,7 @@ def selftest(folder, png):
              f"score {res.score:.4f} direction {res.direction} matched {len(res.path)}; "
              f"rims identical to datasets.fb_object_rims; -> {png}",
              f"  verdict: {res.verdict['text']}",
+             "  " + next((s for s in w.log_box.toPlainText().splitlines() if s.startswith("ICP")), "ICP: no log line"),
              f"  GIF: {gif}"]
     if POOL_CODE.exists():
         w.code_src.setCurrentIndex(1)
@@ -1152,7 +1342,11 @@ def selftest(folder, png):
         rows = w.ret["rows"]
         hit = next(k for k, q in enumerate(rows) if q[3] == q[1])     # first candidate is the mate
         miss = next(k for k, q in enumerate(rows) if q[3] != q[1])    # first candidate is another rim
-        for tag, k, cand in (("mate", hit, 0), ("other", miss, 0), ("other_mate", miss, 1)):
+        for tag, k, cand, icp in (("mate", hit, 0, False), ("mate_icp", hit, 0, True), ("other", miss, 0, False),
+                                  ("other_mate", miss, 1, False)):
+            w.ret_icp.blockSignals(True)
+            w.ret_icp.setChecked(icp)
+            w.ret_icp.blockSignals(False)
             w.cand_box.setCurrentIndex(cand)
             w.query_table.clearSelection()
             w.rres, err0, t0 = None, w.last_error, time.time()
@@ -1169,6 +1363,8 @@ def selftest(folder, png):
             out = png.replace(".png", f"_retrieval_{tag}.png")
             window_capture(w, w.rplot, out)
             i, other = w.rres["key"][1:]
+            if icp and w.rres["pose_icp"] is None:
+                selftest_failed(f"retrieval ICP did not run: {w.rres['icp_note']}")
             lines.append(f"  retrieval {tag}: {w.ret['names'][i]} vs {w.ret['names'][other]}: "
                          f"{w.rres['verdict']['text'].split(':')[0]}, score {w.rres['features']['score']:.4f}, "
                          f"inliers {100 * w.rres['features']['inliers']:.1f}% -> {out}")
@@ -1177,7 +1373,36 @@ def selftest(folder, png):
     w.close()
 
 
+def run_script_main(script, args):
+    """Release only: run an experiment script with the bundled Python (`datc --run-script <script> ...`).
+
+    The script's path is kept in DATC_SCRIPT so that the worker processes of its
+    process pool (Windows starts them fresh from this executable) can load the
+    script's functions before unpickling a task."""
+    import runpy
+    script = os.path.abspath(script)
+    os.environ["DATC_SCRIPT"] = script
+    for s in (sys.stdout, sys.stderr):
+        if s is not None:
+            s.reconfigure(line_buffering=True)
+    sys.argv = [script] + list(args)
+    runpy.run_path(script, run_name="__main__")
+
+
 if __name__ == "__main__":
+    import multiprocessing
+    if FROZEN and os.environ.get("DATC_SCRIPT") and "--multiprocessing-fork" in sys.argv:
+        import runpy   # a pool worker of a script run by --run-script: give __main__ the script's functions
+        sys.modules["__main__"].__dict__.update(
+            {k: v for k, v in runpy.run_path(os.environ["DATC_SCRIPT"], run_name="__mp_main__").items()
+             if not k.startswith("__")})
+    multiprocessing.freeze_support()
+    if len(sys.argv) >= 3 and sys.argv[1] == "--run-script":
+        run_script_main(sys.argv[2], sys.argv[3:])
+        sys.exit(0)
+    if len(sys.argv) >= 4 and sys.argv[1] == "--gif":
+        make_gif(sys.argv[2], sys.argv[3], "--icp" in sys.argv[4:])
+        sys.exit(0)
     if len(sys.argv) == 2 and sys.argv[1] == "--version":
         print(f"DaTC Studio {__version__}")
         sys.exit(0)

@@ -14,4 +14,5 @@ dependencies:
   - pip:
       - pyvista==0.46.5
       - pyvistaqt==0.11.0
+      - imageio==2.36.0
       - pytest

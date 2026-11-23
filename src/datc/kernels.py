@@ -13,6 +13,7 @@ reference implementations.
 from __future__ import annotations
 
 import math
+import sys
 
 import numba as nb
 import numpy as np
@@ -20,9 +21,12 @@ import numpy as np
 NEG = -1e18
 SW_MATCH, SW_GAP_OPEN, SW_GAP_EXT = 2.0, -4.0, -0.6   # hand-set, never tuned
 N_OFFSETS = 32
+# numba keys its disk cache on the .py source, which a frozen release does not ship;
+# there the kernels are compiled once per process instead (same code, same results).
+CACHE = not getattr(sys, "frozen", False)
 
 
-@nb.njit(cache=True)
+@nb.njit(cache=CACHE)
 def sw_nd(x, y, scale, w, match=SW_MATCH, gap_open=SW_GAP_OPEN, gap_ext=SW_GAP_EXT):
     """Best local alignment score of x (n, d) against y (m, d)."""
     n, m, d = x.shape[0], y.shape[0], x.shape[1]
@@ -50,7 +54,7 @@ def sw_nd(x, y, scale, w, match=SW_MATCH, gap_open=SW_GAP_OPEN, gap_ext=SW_GAP_E
     return best
 
 
-@nb.njit(cache=True)
+@nb.njit(cache=CACHE)
 def sw_nd_extent(x, y, scale, w, match=SW_MATCH, gap_open=SW_GAP_OPEN, gap_ext=SW_GAP_EXT):
     """sw_nd plus the traceback of the best alignment: (score, path (k, 2)).
 
@@ -114,7 +118,7 @@ def sw_nd_extent(x, y, scale, w, match=SW_MATCH, gap_open=SW_GAP_OPEN, gap_ext=S
     return best, path
 
 
-@nb.njit(cache=True)
+@nb.njit(cache=CACHE)
 def dtw_nd(x, y):
     """DTW distance of x (n, d) and y (m, d), divided by n + m; 1e9 if too short."""
     n, m, d = x.shape[0], y.shape[0], x.shape[1]
@@ -132,7 +136,7 @@ def dtw_nd(x, y):
     return D[n, m] / (n + m)
 
 
-@nb.njit(cache=True)
+@nb.njit(cache=CACHE)
 def dtw_cyc_nd(x, y, offs):
     """min over the rotations `offs` of dtw_nd(x, roll(y, -o))."""
     m = y.shape[0]

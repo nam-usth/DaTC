@@ -7,4 +7,5 @@ scikit-learn>=1.2
 matplotlib>=3.6
 PyQt5>=5.15
 pyvistaqt>=0.11
+imageio>=2.30
 pytest>=7
