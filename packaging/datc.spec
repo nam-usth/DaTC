@@ -2,6 +2,7 @@
 #   DaTCStudio  the window (no console on Windows)
 #   datc        the same program with a console: --selftest, --gif, --run-script, --version
 # Built by packaging/build_release.py, which also copies the data folders next to the executables.
+import os
 import sys
 
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules, copy_metadata
@@ -29,6 +30,18 @@ a = Analysis(
               "PySide6", "PySide2", "PyQt6"],
     noarchive=False,
 )
+if sys.platform.startswith("linux"):
+    # PyInstaller may pick the distribution's libssl/libcrypto over the environment's newer ones,
+    # which libcurl and hdf5 need; where the environment has the library, ship that copy
+    fixed = []
+    for dest, src, kind in a.binaries:
+        own = os.path.join(sys.prefix, "lib", os.path.basename(dest))
+        if not os.path.realpath(src).startswith(os.path.realpath(sys.prefix) + os.sep) and os.path.exists(own):
+            print("library from the environment:", dest, src, "->", own)
+            src = own
+        fixed.append((dest, src, kind))
+    a.binaries = fixed
+
 pyz = PYZ(a.pure)
 
 common = dict(debug=False, bootloader_ignore_signals=False, strip=False, upx=False)
