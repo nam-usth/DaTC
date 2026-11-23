@@ -135,7 +135,7 @@ What each block measures:
 
 | block | pool | protocol |
 |---|---|---|
-| upper | Fantastic Breaks retrieval pool, 60 objects, 120 rims; PRESIOUS, 5 objects, 47 rims | settings fixed before this table (smoothing 2 samples, 9 x 5 code with bins fitted on the pool without labels); a query ranks every other rim of its pool |
+| upper | Fantastic Breaks retrieval pool, 60 objects, 120 rims; PRESIOUS, 5 objects, 47 rims | 9 x 5 code, fixed before any sweep; smoothing 2 samples, chosen in early runs on 48 tuning contours (40 objects, 19 of them in the retrieval pool); contact threshold, shared by every block, set on the retrieval pool (best of 4 values) and on PRESIOUS (chosen); bin edges fitted on the evaluated pool without labels; a query ranks every other rim of its pool |
 | lower, test half | 30 test objects of the retrieval pool, 60 rims | configurations selected on the 30 development objects over the same 63-point grid; transforms fitted on development rims and frozen; a query ranks the other 59 test rims |
 | lower, held-out | 46 objects outside the pool, 92 rims | every setting frozen; transforms fitted on the 120 pool rims |
 | lower, PRESIOUS | 47 rims | transforms fitted on its own rims (label free) |
