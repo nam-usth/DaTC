@@ -1,0 +1,8 @@
+SELFTEST OK 00_00002: n_A 285 n_B 518 score 0.2096 direction mate matched 248; rims identical to datasets.fb_object_rims; -> figures/app/selftest_00_00002.png
+  verdict: NO MATCH: rule 'score >= 0.08467 and inliers >= 0.5968' (thresholds set on development objects). On the 30 mated and 1740 unmated test-half pairs of Fantastic Breaks it accepted 86.7% of mates and 16.2% of non-mates; on the 26 mated and 1055 unmated PRESIOUS pairs, 65.4% and 52.9%.
+  GIF: figures/app/selftest_00_00002.gif
+  with the pool code: score 0.1762
+  retrieval tab: fb, S_sw: 120 queries, mate ranked first (no tie) for 55.0%
+  retrieval mate: 00_00003/r vs 00_00003/b: MATCH, score 0.3090, inliers 79.7% -> figures/app/selftest_00_00002_retrieval_mate.png
+  retrieval other: 00_00002/b vs 00_00006/b: NO MATCH, score 0.3399, inliers 19.5% -> figures/app/selftest_00_00002_retrieval_other.png
+  retrieval other_mate: 00_00002/b vs 00_00002/r: NO MATCH, score 0.2096, inliers 29.8% -> figures/app/selftest_00_00002_retrieval_other_mate.png

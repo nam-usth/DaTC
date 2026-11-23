@@ -1,0 +1,40 @@
+== table1_reviewed Mon Nov 23 07:16:33 2026 experiments/table1_reviewed.py --pools fb --procs 4
+  fb: scored DaTC + local alignment (12s)
+  fb: scored DaTC + cyclic DTW (72s)
+  fb: scored (kappa,tau) + cyclic dDTW (69s)
+  fb: scored rim length (0s)
+  fb: scored rim planarity (0s)
+
+fantastic_breaks: 120 rims, 120 queries, chance top-1 0.8%
+  ROW fantastic_breaks DaTC + local alignment       top1  55.0  top5  66.7
+  ROW fantastic_breaks DaTC + cyclic DTW            top1  53.3  top5  61.7
+  ROW fantastic_breaks (kappa,tau) + cyclic dDTW    top1   4.2  top5  21.7
+  ROW fantastic_breaks rim length                   top1   3.8  top5  21.2
+  ROW fantastic_breaks rim planarity                top1  10.0  top5  31.7
+  DaTC vs DaTC + cyclic DTW            objects 17:16 (p 1.0000)  queries 30:29
+  DaTC vs (kappa,tau) + cyclic dDTW    objects 45:7 (p 0.0000)  queries 93:21
+  DaTC vs rim length                   objects 36:12 (p 0.0007)  queries 82:36
+  DaTC vs rim planarity                objects 35:12 (p 0.0011)  queries 78:34
+  detection DaTC + local alignment       AUC 0.753  AP 0.303
+  detection rim length                   AUC 0.808  AP 0.037
+REVIEWED DONE
+== table1_reviewed Mon Nov 23 07:26:48 2026 experiments/table1_reviewed.py --pools presious --procs 4
+  presious: scored DaTC + local alignment (2s)
+  presious: scored DaTC + cyclic DTW (5s)
+  presious: scored (kappa,tau) + cyclic dDTW (4s)
+  presious: scored rim length (0s)
+  presious: scored rim planarity (0s)
+
+presious: 47 rims, 47 queries, chance top-1 2.2%
+  ROW presious         DaTC + local alignment       top1  36.2  top5  80.9
+  ROW presious         DaTC + cyclic DTW            top1  38.3  top5  55.3
+  ROW presious         (kappa,tau) + cyclic dDTW    top1  23.4  top5  57.4
+  ROW presious         rim length                   top1  42.7  top5  67.6
+  ROW presious         rim planarity                top1  17.0  top5  53.2
+  DaTC vs DaTC + cyclic DTW            objects 3:1 (p 0.6250)  queries 18:17
+  DaTC vs (kappa,tau) + cyclic dDTW    objects 5:0 (p 0.0625)  queries 27:12
+  DaTC vs rim length                   objects 3:1 (p 0.6250)  queries 19:17
+  DaTC vs rim planarity                objects 5:0 (p 0.0625)  queries 31:12
+  detection DaTC + local alignment       AUC 0.853  AP 0.188
+  detection rim length                   AUC 0.831  AP 0.189
+REVIEWED DONE

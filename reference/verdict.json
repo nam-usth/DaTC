@@ -1,0 +1,113 @@
+{
+ "note": "Thresholds of the DaTC Studio verdict. Fitted on development-half pairs of the Fantastic Breaks retrieval pool (Youden J); measured on test-half pairs and on PRESIOUS without refitting. Inputs: datc.pipeline.pair_features.",
+ "rules": {
+  "score only": {
+   "thresholds": {
+    "score": 0.3657622985566205
+   },
+   "dev": {
+    "tpr": 0.6,
+    "fpr": 0.052873563218390804,
+    "j": 0.5471264367816092,
+    "n_pos": 30,
+    "n_neg": 1740
+   },
+   "test": {
+    "tpr": 0.7,
+    "fpr": 0.05344827586206897,
+    "j": 0.6465517241379309,
+    "n_pos": 30,
+    "n_neg": 1740
+   },
+   "presious": {
+    "tpr": 0.0,
+    "fpr": 0.0,
+    "j": 0.0,
+    "n_pos": 26,
+    "n_neg": 1055
+   }
+  },
+  "inliers only": {
+   "thresholds": {
+    "inliers": 0.6074766355140186
+   },
+   "dev": {
+    "tpr": 0.7666666666666667,
+    "fpr": 0.1511494252873563,
+    "j": 0.6155172413793104,
+    "n_pos": 30,
+    "n_neg": 1740
+   },
+   "test": {
+    "tpr": 0.9333333333333333,
+    "fpr": 0.44310344827586207,
+    "j": 0.4902298850574713,
+    "n_pos": 30,
+    "n_neg": 1740
+   },
+   "presious": {
+    "tpr": 0.6923076923076923,
+    "fpr": 0.7507109004739336,
+    "j": -0.05840320816624134,
+    "n_pos": 26,
+    "n_neg": 1055
+   }
+  },
+  "score and inliers": {
+   "thresholds": {
+    "score": 0.08466702701254034,
+    "inliers": 0.5968391911410689
+   },
+   "dev": {
+    "tpr": 0.7666666666666667,
+    "fpr": 0.08908045977011494,
+    "j": 0.6775862068965518,
+    "n_pos": 30,
+    "n_neg": 1740
+   },
+   "test": {
+    "tpr": 0.8666666666666667,
+    "fpr": 0.16206896551724137,
+    "j": 0.7045977011494253,
+    "n_pos": 30,
+    "n_neg": 1740
+   },
+   "presious": {
+    "tpr": 0.6538461538461539,
+    "fpr": 0.5289099526066351,
+    "j": 0.12493620123951876,
+    "n_pos": 26,
+    "n_neg": 1055
+   }
+  }
+ },
+ "selected": {
+  "name": "score and inliers",
+  "thresholds": {
+   "score": 0.08466702701254034,
+   "inliers": 0.5968391911410689
+  },
+  "dev": {
+   "tpr": 0.7666666666666667,
+   "fpr": 0.08908045977011494,
+   "j": 0.6775862068965518,
+   "n_pos": 30,
+   "n_neg": 1740
+  },
+  "test": {
+   "tpr": 0.8666666666666667,
+   "fpr": 0.16206896551724137,
+   "j": 0.7045977011494253,
+   "n_pos": 30,
+   "n_neg": 1740
+  },
+  "presious": {
+   "tpr": 0.6538461538461539,
+   "fpr": 0.5289099526066351,
+   "j": 0.12493620123951876,
+   "n_pos": 26,
+   "n_neg": 1055
+  }
+ },
+ "seconds": 300.56859254837036
+}

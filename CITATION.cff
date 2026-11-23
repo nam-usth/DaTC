@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper."
+title: "DaTC: Darboux Turn Code for thin-shell fragment matching"
+authors:
+  - family-names: Huynh
+    given-names: Vinh Nam
+  - family-names: Nguyen
+    given-names: Hoang Ha
+  - family-names: Raffin
+    given-names: Romain
+preferred-citation:
+  type: conference-paper
+  title: "Matching Thin-Shell Fragments with a Darboux Turn Code of Their Fracture Boundaries"
+  authors:
+    - family-names: Huynh
+      given-names: Vinh Nam
+    - family-names: Nguyen
+      given-names: Hoang Ha
+    - family-names: Raffin
+      given-names: Romain
+  conference:
+    name: "RIVF International Conference on Computing and Communication Technologies"
+  year: 2026

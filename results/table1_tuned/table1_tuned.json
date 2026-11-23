@@ -1,0 +1,160 @@
+{
+ "configs": {
+  "DaTC rank code + local al.": {
+   "channels": [
+    "alpha",
+    "beta"
+   ],
+   "sm": 5.0,
+   "transform": "rank",
+   "matcher": "swc"
+  },
+  "(kappa,tau) tuned + cyclic DTW": {
+   "channels": [
+    "kappa",
+    "tau"
+   ],
+   "sm": 8.0,
+   "transform": "rank",
+   "matcher": "dtw"
+  },
+  "(kappa,tau) tuned + local al.": {
+   "channels": [
+    "kappa",
+    "tau"
+   ],
+   "sm": 8.0,
+   "transform": "rank",
+   "matcher": "swc"
+  }
+ },
+ "test_half": {
+  "n_queries": 60,
+  "table": {
+   "DaTC rank code + local al.": {
+    "top1": 76.66666666666667,
+    "top5": 83.33333333333334,
+    "top10": 88.33333333333333
+   },
+   "(kappa,tau) tuned + cyclic DTW": {
+    "top1": 75.0,
+    "top5": 90.0,
+    "top10": 100.0
+   },
+   "(kappa,tau) tuned + local al.": {
+    "top1": 80.0,
+    "top5": 93.33333333333333,
+    "top10": 100.0
+   }
+  },
+  "datc_vs": {
+   "(kappa,tau) tuned + cyclic DTW": {
+    "q_win": 5,
+    "q_lose": 13,
+    "q_tie": 42,
+    "q_p": 0.09625244140625,
+    "o_win": 3,
+    "o_lose": 7,
+    "o_split": 20,
+    "o_p": 0.34375
+   },
+   "(kappa,tau) tuned + local al.": {
+    "q_win": 4,
+    "q_lose": 13,
+    "q_tie": 43,
+    "q_p": 0.049041748046875,
+    "o_win": 2,
+    "o_lose": 6,
+    "o_split": 22,
+    "o_p": 0.2890625
+   }
+  },
+  "chance_top1": 1.694915254237288
+ },
+ "heldout": {
+  "n_queries": 92,
+  "table": {
+   "DaTC rank code + local al.": {
+    "top1": 56.52173913043478,
+    "top5": 70.65217391304348,
+    "top10": 75.0
+   },
+   "(kappa,tau) tuned + cyclic DTW": {
+    "top1": 57.608695652173914,
+    "top5": 71.73913043478261,
+    "top10": 81.52173913043478
+   },
+   "(kappa,tau) tuned + local al.": {
+    "top1": 58.69565217391305,
+    "top5": 77.17391304347827,
+    "top10": 86.95652173913044
+   }
+  },
+  "datc_vs": {
+   "(kappa,tau) tuned + cyclic DTW": {
+    "q_win": 25,
+    "q_lose": 20,
+    "q_tie": 47,
+    "q_p": 0.5514843298025198,
+    "o_win": 11,
+    "o_lose": 9,
+    "o_split": 26,
+    "o_p": 0.8238029479980469
+   },
+   "(kappa,tau) tuned + local al.": {
+    "q_win": 17,
+    "q_lose": 27,
+    "q_tie": 48,
+    "q_p": 0.17417114727072658,
+    "o_win": 6,
+    "o_lose": 11,
+    "o_split": 29,
+    "o_p": 0.332305908203125
+   }
+  },
+  "chance_top1": 1.098901098901099
+ },
+ "presious": {
+  "n_queries": 47,
+  "table": {
+   "DaTC rank code + local al.": {
+    "top1": 57.446808510638306,
+    "top5": 72.3404255319149,
+    "top10": 82.97872340425532
+   },
+   "(kappa,tau) tuned + cyclic DTW": {
+    "top1": 68.08510638297872,
+    "top5": 85.1063829787234,
+    "top10": 91.48936170212765
+   },
+   "(kappa,tau) tuned + local al.": {
+    "top1": 74.46808510638297,
+    "top5": 91.48936170212765,
+    "top10": 93.61702127659575
+   }
+  },
+  "datc_vs": {
+   "(kappa,tau) tuned + cyclic DTW": {
+    "q_win": 8,
+    "q_lose": 18,
+    "q_tie": 21,
+    "q_p": 0.07551869750022888,
+    "o_win": 1,
+    "o_lose": 3,
+    "o_split": 1,
+    "o_p": 0.625
+   },
+   "(kappa,tau) tuned + local al.": {
+    "q_win": 6,
+    "q_lose": 19,
+    "q_tie": 22,
+    "q_p": 0.01463329792022705,
+    "o_win": 0,
+    "o_lose": 3,
+    "o_split": 2,
+    "o_p": 0.25
+   }
+  },
+  "chance_top1": 2.1739130434782608
+ }
+}

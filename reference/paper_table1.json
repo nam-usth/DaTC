@@ -1,0 +1,52 @@
+{
+ "note": "Values printed in Table I and Section VI-A of the RIVF 2026 camera-ready paper (percent, ties at their expected rank). make_table1.py compares the recomputed values with these, to the printed precision (0.05 points), and object-level sign-test counts exactly.",
+ "reviewed": {
+  "fantastic_breaks": {
+   "DaTC + local alignment": [55.0, 66.7],
+   "DaTC + cyclic DTW": [53.3, 61.7],
+   "(kappa,tau) + cyclic dDTW": [4.2, 21.7],
+   "rim length": [3.8, 21.2],
+   "rim planarity": [10.0, 31.7]
+  },
+  "presious": {
+   "DaTC + local alignment": [36.2, 80.9],
+   "DaTC + cyclic DTW": [38.3, 55.3],
+   "(kappa,tau) + cyclic dDTW": [23.4, 57.4],
+   "rim length": [42.7, 67.6],
+   "rim planarity": [17.0, 53.2]
+  },
+  "objects_fb_datc_vs": {
+   "(kappa,tau) + cyclic dDTW": [45, 7],
+   "rim length": [36, 12],
+   "rim planarity": [35, 12]
+  },
+  "detection_fb": {
+   "DaTC + local alignment": {"auc": 0.753, "ap": 0.303},
+   "rim length": {"auc": 0.808, "ap": 0.037}
+  }
+ },
+ "tuned": {
+  "test_half": {
+   "DaTC rank code + local al.": [76.7, 83.3],
+   "(kappa,tau) tuned + cyclic DTW": [75.0, 90.0],
+   "(kappa,tau) tuned + local al.": [80.0, 93.3]
+  },
+  "heldout_top1": {
+   "DaTC rank code + local al.": 56.5,
+   "(kappa,tau) tuned + cyclic DTW": 57.6,
+   "(kappa,tau) tuned + local al.": 58.7
+  },
+  "presious_top1": {
+   "DaTC rank code + local al.": 57.4,
+   "(kappa,tau) tuned + cyclic DTW": 68.1,
+   "(kappa,tau) tuned + local al.": 74.5
+  },
+  "objects_test_half_kt_vs_datc": {
+   "(kappa,tau) tuned + cyclic DTW": [7, 3],
+   "(kappa,tau) tuned + local al.": [6, 2]
+  },
+  "objects_heldout_datc_vs": {
+   "(kappa,tau) tuned + cyclic DTW": [11, 9]
+  }
+ }
+}
