@@ -29,6 +29,7 @@ a = Analysis(
     excludes=["tkinter", "IPython", "jupyter", "notebook", "pytest", "tensorflow", "torch", "open3d",
               "PySide6", "PySide2", "PyQt6"],
     noarchive=False,
+    runtime_hooks=[SPECPATH + "/rthook_linux_fonts.py"] if sys.platform.startswith("linux") else [],
 )
 if sys.platform.startswith("linux"):
     # PyInstaller may pick the distribution's libssl/libcrypto over the environment's newer ones,
