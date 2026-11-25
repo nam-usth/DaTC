@@ -280,6 +280,12 @@ gap extend -0.6, weights 6 and 4) were set by hand and never tuned.
 }
 ```
 
+## Acknowledgment
+
+The PRESIOUS data were produced by the PRESIOUS project, funded by the European
+Union (Seventh Framework Programme, grant agreement 600533). The data sets and
+their terms of use are at https://www.ntnu.edu/presious/3d-data-sets.
+
 ## License
 
 MIT, see `LICENSE`. The datasets keep their own licenses.
